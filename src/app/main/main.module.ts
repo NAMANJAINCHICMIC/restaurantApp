@@ -12,7 +12,7 @@ import { UpdateProfileComponent } from './update-profile/update-profile.componen
 import { AddFoodItemComponent } from './add-food-item/add-food-item.component';
 import { AddChefComponent } from './add-chef/add-chef.component';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
@@ -30,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     SharedModule,
     MatIconModule,
+    MatSelectModule,
     ReactiveFormsModule
   ],
   exports:[

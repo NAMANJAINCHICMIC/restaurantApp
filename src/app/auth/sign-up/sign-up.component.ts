@@ -14,6 +14,7 @@ export class SignUpComponent {
   uploadImage : Blob | string=''
   imgPath='';
   visible=true;
+  picUpladed = false;
   showError= false;
   validateDateOfbirth = false
   viewPassword(){
@@ -83,6 +84,7 @@ imageUpload(event:any){
  this.authService.imageUpload(formData).subscribe((res:any)=>{
   console.log(res);
   this.registrationForm.value.pathToProfilePic =  environment.AUTH_API +res.data.pathToFile
+  this.picUpladed = true;
   // PathToFileAttachment = AUTH_API + PathToFileAttachment;
   // this.imgPath = res.data
   // console.log(this.imgPath);

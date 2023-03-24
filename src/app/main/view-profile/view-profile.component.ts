@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ViewProfileComponent implements OnInit {
     myself:any;
+   
     constructor(private authService : AuthService){}
     ngOnInit(): void {
     this.authService.userProfile().subscribe((res:any)=>{

@@ -25,6 +25,7 @@ export class UpdateProfileComponent implements OnInit{
   uploadImage : Blob | string=''
   imgPath='';
   visible=true;
+  picUpladed = false;
   showError= false;
   validateDateOfbirth = false
   viewPassword(){
@@ -110,7 +111,7 @@ imageUpload(event:any){
  this.authService.imageUpload(formData).subscribe((res:any)=>{
   console.log(res);
   this.updateProfileForm.value.pathToProfilePic =  environment.AUTH_API +res.data.pathToFile
-
+  this.picUpladed = true;
 },
   (error:any) => {
     console.log('Upload error:', error);

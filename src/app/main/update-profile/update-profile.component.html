@@ -12,10 +12,10 @@
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
                                             <img *ngIf="myself?.pathToProfilePic === null"
-                                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                                            [src]="picUpladed ? updateProfileForm.value.pathToProfilePic :'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp'"
                                                 alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                                             <img *ngIf="myself?.pathToProfilePic !== null"
-                                                [src]="myself?.pathToProfilePic" alt="avatar"
+                                            [src]="picUpladed ? updateProfileForm.value.pathToProfilePic :myself?.pathToProfilePic" alt="avatar"
                                                 class="rounded-circle img-fluid" style="width: 150px;">
 
                                             <!-- <h5 class="my-3">{{ myself?.firstName}} {{ myself?.lastName}}</h5> -->
