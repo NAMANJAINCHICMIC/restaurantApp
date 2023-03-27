@@ -28,61 +28,61 @@ const routes: Routes = [
 {
     path: 'sign-in',
     component: SignInComponent,
-    // canActivate:[AuthGuard]
+    canActivate:[AuthGuard]
  
 },
 {
     path: 'sign-up',
     component: SignUpComponent,
-    // canActivate:[AuthGuard]
+    canActivate:[AuthGuard]
 
 },
 {path:'reset-password',component: ResetPasswordComponent},
 {path:'verify-user',component: VerifyUserComponent},
 {path:'change-password',component:ChangePasswordComponent,  
-//  canActivate:[AuthGuard]
+ canActivate:[AuthGuard]
 },
 {path:'forget-password',component:ForgetPasswordComponent},
 
 {
     path: 'home',
     component: HomeComponent,
-        // canActivate:[AuthGuard]
+        canActivate:[AuthGuard]
 },
 {
     path: 'menu',
     component: MenuComponent,
-        // canActivate:[AuthGuard]
+        canActivate:[AuthGuard]
 },
 {
     path: 'my-cart',
     component: CartComponent,
-        // canActivate:[AuthGuard]
+        canActivate:[AuthGuard]
 },
 {
     path: 'orders',
     component: OrdersComponent,
-        // canActivate:[AuthGuard]
+        canActivate:[AuthGuard]
 },
 {
     path: 'add-food',
     component: AddFoodItemComponent,
-        // canActivate:[AuthGuard]
+        canActivate:[AuthGuard]
 },
 {
     path: 'add-chef',
     component: AddChefComponent,
-        // canActivate:[AuthGuard]
+        canActivate:[AuthGuard]
 },
 {
     path: 'view-profile',
     component: ViewProfileComponent,
-        // canActivate:[AuthGuard]
+        canActivate:[AuthGuard]
 },
 {
     path: 'update-profile',
     component: UpdateProfileComponent,
-        // canActivate:[AuthGuard]
+        canActivate:[AuthGuard]
 },
 {
     path: '**',

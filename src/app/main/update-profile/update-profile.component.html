@@ -11,11 +11,11 @@
                                 <div class="row-lg-4">
                                     <div class="card mb-4">
                                         <div class="card-body text-center">
-                                            <img *ngIf="myself?.pathToProfilePic === null"
+                                            <!-- <img *ngIf="myself?.pathToProfilePic === null"
                                             [src]="picUpladed ? updateProfileForm.value.pathToProfilePic :'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp'"
-                                                alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                                            <img *ngIf="myself?.pathToProfilePic !== null"
-                                            [src]="picUpladed ? updateProfileForm.value.pathToProfilePic :myself?.pathToProfilePic" alt="avatar"
+                                                alt="avatar" class="rounded-circle img-fluid" style="width: 150px;"> -->
+                                            <img 
+                                            [src]="picUpladed ? updateProfileForm.value.pathToProfilePic : myself?.pathToProfilePic ? myself?.pathToProfilePic : defaultImage" alt="avatar"
                                                 class="rounded-circle img-fluid" style="width: 150px;">
 
                                             <!-- <h5 class="my-3">{{ myself?.firstName}} {{ myself?.lastName}}</h5> -->
@@ -99,19 +99,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col mb-3 ">
-                                        <label for="inputDate">Date Of Birth</label>
-                                        <input type="date" class="form-control" id="inputDate"
-                                            formControlName="dateOfBirth" (change)="validateDOB($event)"
-                                            name="dateOfBirth"
-                                            [ngClass]="{'is-invalid': (controlName.dateOfBirth.errors || validateDateOfbirth) && (controlName.dateOfBirth.touched || controlName.dateOfBirth.dirty ), 'is-valid':controlName.dateOfBirth.valid && !validateDateOfbirth}"
-                                            placeholder="Date Of Birth">
-
-                                        <div *ngIf="validateDateOfbirth" class="alert alert-danger">
-                                            Age must be between 12 years and 100 years
-                                        </div>
-
-                                    </div>
+                                    
                                 </div>
                                 <div class="form-outline mb-4">
                                     <label for="inputAddress">Address</label>

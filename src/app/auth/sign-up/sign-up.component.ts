@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { defaultImage } from 'src/app/utils/constants/link';
 import { environment } from 'src/environment';
 
 @Component({
@@ -16,7 +17,7 @@ export class SignUpComponent {
   visible=true;
   picUpladed = false;
   showError= false;
-  validateDateOfbirth = false
+  defaultImage = defaultImage
   viewPassword(){
     this.visible = !this.visible;
   }
@@ -31,7 +32,7 @@ export class SignUpComponent {
       phone: new FormControl('',[Validators.required , Validators.minLength(10),Validators.pattern("^[6-9]\\d{9}$")]),
       address: new FormControl('',Validators.required ),
       password: new FormControl('',[Validators.required , Validators.minLength(8),Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")]),
-      dateOfBirth: new FormControl('', Validators.required ),
+    
       pathToProfilePic: new FormControl('', ),
     }
   )
@@ -42,7 +43,7 @@ onClick(){
   this.router.navigateByUrl("/sign-in");
 }
 onSubmit(){
-  if (this.registrationForm.valid && !this.validateDateOfbirth) {
+  if (this.registrationForm.valid ) {
     console.log('form submitted');
   console.log(this.registrationForm.value);
   this.authService.register(this.registrationForm).subscribe((res)=>{
@@ -51,8 +52,8 @@ onSubmit(){
         if(res.success){
   
           this.registrationForm.reset();
+          this.authService.userRole = res.data.userRole;
           this.authService.storeToken(res.data.token);
-
           this.router.navigate(['home']);
         }
       })
@@ -61,19 +62,6 @@ onSubmit(){
   console.log("show errors")
   this.showError = true;
 }
-}
-validateDOB(e: Event){
- 
-  const year = new Date((e.target as HTMLInputElement).value).getFullYear();
-  const today = new Date().getFullYear();
-
-  if( (today-year) < 12 || (today -year)>100){
-
-    this.validateDateOfbirth= true
-
-  }else{
-    this.validateDateOfbirth = false
-  }
 }
 
 imageUpload(event:any){
@@ -86,8 +74,8 @@ imageUpload(event:any){
   this.registrationForm.value.pathToProfilePic =  environment.AUTH_API +res.data.pathToFile
   this.picUpladed = true;
   // PathToFileAttachment = AUTH_API + PathToFileAttachment;
-  // this.imgPath = res.data
-  // console.log(this.imgPath);
+  this.imgPath = res.data
+  console.log(this.imgPath);
   // this.chatService.sendImage(this.chatService.receiverEmail,this.imgPath,2,this.content)
   // this.chatService.sendImage(this.chatService.receiverEmail,this.filePath)
 },

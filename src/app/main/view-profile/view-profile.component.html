@@ -6,10 +6,10 @@
       <div class="col-lg-4">
         <div class="card mb-4">
           <div class="card-body text-center">
-            <img *ngIf="myself?.pathToProfilePic ===null"
+            <!-- <img *ngIf="!myself?.pathToProfilePic"    
               src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-              class="rounded-circle img-fluid" style="width: 150px;">
-            <img *ngIf="myself?.pathToProfilePic !== null" [src]="myself?.pathToProfilePic" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;"> -->
+            <img  [src]="myself?.pathToProfilePic? myself?.pathToProfilePic : defaultImage " alt="avatar"
               class="rounded-circle img-fluid" style="width: 150px; height: 150px;">
 
             <h5 class="my-3">{{ myself?.firstName}} {{ myself?.lastName}}</h5>
@@ -48,17 +48,25 @@
               </div>
             </div>
             <hr>
-            <div *ngIf="!( myself?.role ==='customer')">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Address</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ myself?.address}}</p>
+              </div>
+            </div>
+            <hr>
+       
               <div class="row">
                 <div class="col-sm-3">
                   <p class="mb-0">Role</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{ myself?.role}}</p>
+                  <p class="text-muted mb-0">{{ myself?.userRole ===role.user? 'Customer': myself?.userRole ===role.admin?'Manager':myself?.userRole ===role.chef?'Chef':''}}</p>
                 </div>
               </div>
               <hr>
-            </div>
 
             <div class="row">
               <div class="col-sm-3">

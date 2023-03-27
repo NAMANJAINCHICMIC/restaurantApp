@@ -6,11 +6,11 @@
                 <span class="fs-2">Your Cart</span>
             </div>
 
-            <div class="text-center" *ngIf="isCartEmpty == true">
+            <div class="text-center" *ngIf="isCartEmpty">
                 <h3>No items in cart.</h3>
             </div>
 
-            <div *ngIf="isCartEmpty == false">
+            <div *ngIf="!isCartEmpty">
                 <div *ngFor="let item of cartArray">
                     <div class="card mb-3 mx-auto" style="max-width: 700px;" *ngIf="item.quantity > 0">
                         <div class="row g-0">

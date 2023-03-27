@@ -1,4 +1,4 @@
-<section class="vh-100" style="background-color: #508bfc;">
+<section class="vh-100" style="background-color: #ff4081;">
   <div class="container h-100 mb-0 ">
     <div class="row d-flex justify-content-center align-items-center h-100 mb-0 ">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -11,7 +11,7 @@
               <div class="row-lg-4">
                 <div class="card mb-3">
                   <div class="card-body text-center">
-                    <img  [src]="picUpladed ? registrationForm.value.pathToProfilePic :'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp'" alt="avatar"
+                    <img  [src]="picUpladed ? registrationForm.value.pathToProfilePic : defaultImage" alt="avatar"
                       class="rounded-circle img-fluid" style="width: 100px;">
                     <!-- <h5 class="my-3">{{ controlName?.firstName}} {{ controlName?.lastName}}</h5> -->
                     <div>
@@ -107,25 +107,7 @@
                 </div>
               </div>
 
-              <!-- <div class="form-row align-self-center justify-content-center"> -->
-                <div class="form-outline mb-4">
-                  <label for="inputDate">Date Of Birth</label>
-                  <input type="date" class="form-control col col-12" id="inputDate" formControlName="dateOfBirth"
-                    (change)="validateDOB($event)" name="dateOfBirth"
-                    [ngClass]="{'is-invalid': (controlName.dateOfBirth.errors || validateDateOfbirth) && (controlName.dateOfBirth.touched || controlName.dateOfBirth.dirty ), 'is-valid':controlName.dateOfBirth.valid && !validateDateOfbirth}"
-                    placeholder="Date Of Birth">
-                  <div *ngIf="controlName.dateOfBirth.invalid && showError " class="alert alert-danger">
-                    <div *ngIf="controlName.dateOfBirth.errors?.['required']">
-                      Date Of Birth is required.
-                    </div>
-                  </div>
-                  <div *ngIf="validateDateOfbirth" class="alert alert-danger">
-                    Age must be between 12 years and 100 years
-                  </div>
-
-                </div>
-              <!-- </div> -->
-
+             
               <div class="form-row align-self-center justify-content-center">
                 <div class="form-group ">
                   <label for="inputPassword4">Password</label>

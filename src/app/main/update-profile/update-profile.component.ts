@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { defaultImage } from 'src/app/utils/constants/link';
 import { environment } from 'src/environment';
 
 @Component({
@@ -17,8 +18,6 @@ export class UpdateProfileComponent implements OnInit{
     // email: FormControl<string | null>,
     phone: FormControl<string | null>,
     address: FormControl<string | null>,
-   
-    dateOfBirth: FormControl<any>,
     pathToProfilePic: FormControl<string | null>
 }>;
   myself:any;
@@ -27,7 +26,7 @@ export class UpdateProfileComponent implements OnInit{
   visible=true;
   picUpladed = false;
   showError= false;
-  validateDateOfbirth = false
+  defaultImage = defaultImage;
   viewPassword(){
     this.visible = !this.visible;
   }
@@ -39,7 +38,7 @@ export class UpdateProfileComponent implements OnInit{
         // email: new FormControl('', [Validators.required,Validators.email]),
         phone: new FormControl('',[Validators.required , Validators.minLength(10),Validators.pattern("^[6-9]\\d{9}$")]),
         address: new FormControl('',Validators.required ),
-        dateOfBirth: new FormControl('', Validators.required ),
+       
         pathToProfilePic:new FormControl('')
       }
     )
@@ -55,8 +54,7 @@ export class UpdateProfileComponent implements OnInit{
           lastName: new FormControl(this.myself.lastName, [Validators.required , Validators.minLength(3)]),
           // email: new FormControl(''),
           address: new FormControl(this.myself.address,Validators.required ),
-          phone: new FormControl(this.myself.phone,[Validators.required , Validators.minLength(10),Validators.pattern("^[6-9]\\d{9}$")]),
-          dateOfBirth: new FormControl(this.myself.dateOfBirth),
+          phone: new FormControl(this.myself.phone,[Validators.required , Validators.minLength(10),Validators.pattern("^[6-9]\\d{9}$")]),    
           pathToProfilePic:new FormControl(this.myself.pathToProfilePic)
         }
       )
@@ -72,7 +70,7 @@ onSubmit(){
   if (this.updateProfileForm.valid ) {
     console.log('form submitted');
 
-  const { firstName , lastName, phone,dateOfBirth, pathToProfilePic} = this.updateProfileForm.value
+  const { firstName , lastName, phone, pathToProfilePic} = this.updateProfileForm.value
   console.log(this.updateProfileForm.value);
   // this.updateProfileForm.value.email="string";
   this.authService.updateUserProfile(this.updateProfileForm.value).subscribe(
@@ -91,18 +89,7 @@ onSubmit(){
   this.showError = true;
 }
 }
-validateDOB(e: Event){
- 
-  const year = new Date((e.target as HTMLInputElement).value).getFullYear();
-  const today = new Date().getFullYear();
 
-  if( (today-year) < 12 || (today -year)>100){
-    this.validateDateOfbirth= true
-
-  }else{
-    this.validateDateOfbirth = false
-  }
-}
 imageUpload(event:any){
   this.uploadImage = event.target.files[0]
  const formData = new FormData()

@@ -50,6 +50,7 @@ export class SignInComponent {
           if (res.success) {
 
             this.loginForm.reset();
+            this.authService.userRole = res.data.userRole;
             this.authService.storeToken(res.data.token);
      
             this.router.navigate(['home']);

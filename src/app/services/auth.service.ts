@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ const AUTH_API = environment.AUTH_API;
   providedIn: 'root'
 })
 export class AuthService {
-
+  userRole ?:string;
   constructor(private http: HttpClient , private router: Router) { }
   storeToken(tokenValue:string){
     localStorage.setItem('token',tokenValue)
@@ -26,12 +26,12 @@ export class AuthService {
   getResetToken(){
     return localStorage.getItem('resetToken')
   }
-  isLoggedIn():boolean{
+  isNotLoggedIn():boolean{
     return !localStorage.getItem('token')
   }
   login(email: string| null | undefined, password: string| null | undefined): Observable<any> {
     return this.http.post(
-      AUTH_API + 'api/v1/user/login',
+      AUTH_API + 'api/v1/login',
       {
         email,
         password,
@@ -63,18 +63,22 @@ export class AuthService {
   resetPassword(otp: string| null | undefined,password: string| null | undefined,): Observable<any> {
     return this.http.post(
       AUTH_API + 'api/v1/resetPassword',
-      {otp,password},
-    
+      {otp,password},  
+        {
+        headers: new HttpHeaders({
+           'Content-Type': 'application/json',
+           'Authorization': "Bearer "+ localStorage.getItem('resetToken')
+      
+      })
+      }
     );
   }
   changePassword(oldPassword: string| null | undefined,password: string| null | undefined): Observable<any> {
-    return this.http.post(
-     
+    return this.http.post(   
       AUTH_API + 'api/v1/changePassword',
      {
       oldPassword,password
-     },
-      
+     },    
     );
   }
   logout(): Observable<any> {
@@ -85,30 +89,23 @@ export class AuthService {
       (res:any)=>{
       console.log(res);
       alert(res.message);
-      if (res.success){ 
-      
+      if (res.success){    
         localStorage.clear();
         this.router.navigate(['/']);
       }}
     );
-
   }
-
-
   imageUpload(file: any): Observable<any> {
-
     const params = {
       type: 2,
-
     }
     return this.http.post(
-
       AUTH_API + 'api/v1/uploadFile', file, { params: params }
     );
   }
   userProfile(){
     return this.http.get(
-      AUTH_API + 'api/v1/users/getYourself'  
+      AUTH_API + 'api/v1/getYourself'  
     );
   }
   updateUserProfile(data:any):Observable<any>{

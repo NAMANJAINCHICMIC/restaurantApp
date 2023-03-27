@@ -12,7 +12,7 @@ import { MainModule } from './main/main.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from '@angular/material/icon';
-
+import { ToastrModule } from 'ngx-toastr';
 const material =[
   MatIconModule
 ]
@@ -30,7 +30,8 @@ const material =[
     MainModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    material
+    material,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   exports: [
