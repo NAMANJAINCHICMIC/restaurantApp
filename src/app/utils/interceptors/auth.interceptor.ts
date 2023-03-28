@@ -30,7 +30,8 @@ export class AuthInterceptor implements HttpInterceptor {
            this.router.navigate(['/']);
           }else{
             // alert(error.statusText);
-this.toastr.error('Error',error.statusText)
+this.toastr.error('Error',error.statusText);
+this.toastr.error(error.statusText, 'Error')
           }
     
           return throwError(error);

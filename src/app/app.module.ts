@@ -19,15 +19,11 @@ const material =[
 @NgModule({
   declarations: [
     AppComponent,
-
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    AuthModule,
-    SharedModule,
-    MainModule,
     HttpClientModule,
     BrowserAnimationsModule,
     material,

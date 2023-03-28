@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { defaultImage } from 'src/app/utils/constants/link';
+import { MainService } from 'src/app/services/main.service';
+import { defaultImage, PAGE } from 'src/app/utils/constants/link';
 import { environment } from 'src/environment';
 
 @Component({
@@ -30,7 +31,7 @@ export class UpdateProfileComponent implements OnInit{
   viewPassword(){
     this.visible = !this.visible;
   }
-  constructor(private router: Router , private http: HttpClient,private authService: AuthService){
+  constructor(private router: Router , private http: HttpClient,private mainService: MainService){
     this.updateProfileForm = new FormGroup(
       {
         firstName: new FormControl('', [Validators.required , Validators.minLength(3)]),
@@ -45,7 +46,7 @@ export class UpdateProfileComponent implements OnInit{
   }
   
   ngOnInit(): void {
-    this.authService.userProfile().subscribe((res:any)=>{
+    this.mainService.userProfile().subscribe((res:any)=>{
       this.myself =res.data
       console.log(res);
       this.updateProfileForm = new FormGroup(
@@ -73,13 +74,13 @@ onSubmit(){
   const { firstName , lastName, phone, pathToProfilePic} = this.updateProfileForm.value
   console.log(this.updateProfileForm.value);
   // this.updateProfileForm.value.email="string";
-  this.authService.updateUserProfile(this.updateProfileForm.value).subscribe(
+  this.mainService.updateUserProfile(this.updateProfileForm.value).subscribe(
     (res:any)=>{
       console.log(res)
       alert(res.message);
       if(res.success){
 
-        this.router.navigate(['home']);
+        this.router.navigate([PAGE.HOME]);
       }
     }
   );
@@ -95,9 +96,9 @@ imageUpload(event:any){
  const formData = new FormData()
   formData.append('file',this.uploadImage)
 
- this.authService.imageUpload(formData).subscribe((res:any)=>{
+ this.mainService.imageUpload(formData).subscribe((res:any)=>{
   console.log(res);
-  this.updateProfileForm.value.pathToProfilePic =  environment.AUTH_API +res.data.pathToFile
+  this.updateProfileForm.value.pathToProfilePic =  environment.AUTH_API +res.data.pathToPic
   this.picUpladed = true;
 },
   (error:any) => {

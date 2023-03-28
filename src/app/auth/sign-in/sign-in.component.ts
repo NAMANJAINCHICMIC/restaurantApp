@@ -4,6 +4,8 @@ import {  Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient,  HttpHeaders } from '@angular/common/http';
+import { PAGE } from 'src/app/utils/constants/link';
+import { MainService } from 'src/app/services/main.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,7 +16,7 @@ export class SignInComponent {
 
 
   showError = false;
-  constructor(private http: HttpClient, private router: Router, private authService: AuthService) {
+  constructor(private http: HttpClient, private router: Router, private authService: AuthService , private  mainService: MainService) {
 
   }
   loginForm = new FormGroup(
@@ -29,10 +31,10 @@ export class SignInComponent {
     return this.loginForm.controls;
   }
   onClick() {
-    this.router.navigateByUrl("/sign-up");
+    this.router.navigate([PAGE.SIGN_UP]);
   }
   onClickForget() {
-    this.router.navigateByUrl("/forget-password");
+    this.router.navigate([PAGE.FORGOT_PASSWORD]);
   }
 
 
@@ -50,10 +52,10 @@ export class SignInComponent {
           if (res.success) {
 
             this.loginForm.reset();
-            this.authService.userRole = res.data.userRole;
+            this.mainService.userRole = res.data.userRole;
             this.authService.storeToken(res.data.token);
      
-            this.router.navigate(['home']);
+            this.router.navigate([PAGE.HOME]);
           }
         }
       );

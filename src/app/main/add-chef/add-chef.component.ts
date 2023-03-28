@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { MainService } from 'src/app/services/main.service';
 import { environment } from 'src/environment';
 
 @Component({
@@ -30,7 +31,7 @@ export class AddChefComponent  implements OnInit{
   viewPassword(){
     this.visible = !this.visible;
   }
-  constructor(private router: Router , private http: HttpClient,private authService: AuthService){
+  constructor(private router: Router , private http: HttpClient,private mainService: MainService){
     this.chefProfileForm = new FormGroup(
       {
         firstName: new FormControl('', [Validators.required , Validators.minLength(3)]),
@@ -45,7 +46,7 @@ export class AddChefComponent  implements OnInit{
   }
   
   ngOnInit(): void {
-    this.authService.userProfile().subscribe((res:any)=>{
+    this.mainService.userProfile().subscribe((res:any)=>{
       this.myself =res.data
       console.log(res);
       this.chefProfileForm = new FormGroup(
@@ -74,7 +75,7 @@ onSubmit(){
   const { firstName , lastName, phone,dateOfBirth, pathToProfilePic} = this.chefProfileForm.value
   console.log(this.chefProfileForm.value);
   // this.chefProfileForm.value.email="string";
-  this.authService.updateUserProfile(this.chefProfileForm.value).subscribe(
+  this.mainService.updateUserProfile(this.chefProfileForm.value).subscribe(
     (res:any)=>{
       console.log(res)
       alert(res.message);
@@ -107,7 +108,7 @@ imageUpload(event:any){
  const formData = new FormData()
   formData.append('file',this.uploadImage)
 
- this.authService.imageUpload(formData).subscribe((res:any)=>{
+ this.mainService.imageUpload(formData).subscribe((res:any)=>{
   console.log(res);
   this.chefProfileForm.value.pathToProfilePic =  environment.AUTH_API +res.data.pathToFile
 

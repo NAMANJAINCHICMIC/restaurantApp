@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { PAGE } from 'src/app/utils/constants/link';
 
 @Component({
   selector: 'app-reset-password',
@@ -51,7 +52,7 @@ onSubmit(){
     this.resetForm.reset();
     localStorage.removeItem('resetToken');
     this.authService.storeToken(res.data.token);
-    this.router.navigate(['home']);
+    this.router.navigate([PAGE.HOME]);
     }}
   );
   // this.authService.register(this.registrationForm.value).subscribe();

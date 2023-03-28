@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { defaultImage } from 'src/app/utils/constants/link';
+import { MainService } from 'src/app/services/main.service';
+import { defaultImage, PAGE } from 'src/app/utils/constants/link';
 import { environment } from 'src/environment';
 
 @Component({
@@ -12,16 +13,16 @@ import { environment } from 'src/environment';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent {
-  uploadImage : Blob | string=''
-  imgPath='';
+  // uploadImage : Blob | string=''
+  // imgPath='';
   visible=true;
-  picUpladed = false;
+  // picUploaded = false;
   showError= false;
   defaultImage = defaultImage
   viewPassword(){
     this.visible = !this.visible;
   }
-  constructor(private router: Router , private http: HttpClient,private authService: AuthService){}
+  constructor(private router: Router , private http: HttpClient,private authService: AuthService , private  mainService: MainService){}
   
 
   registrationForm = new FormGroup(
@@ -33,14 +34,14 @@ export class SignUpComponent {
       address: new FormControl('',Validators.required ),
       password: new FormControl('',[Validators.required , Validators.minLength(8),Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")]),
     
-      pathToProfilePic: new FormControl('', ),
+      // pathToProfilePic: new FormControl('', ),
     }
   )
 get controlName(){
   return this.registrationForm.controls;
 }
 onClick(){
-  this.router.navigateByUrl("/sign-in");
+  this.router.navigate([PAGE.SIGN_IN]);
 }
 onSubmit(){
   if (this.registrationForm.valid ) {
@@ -52,9 +53,9 @@ onSubmit(){
         if(res.success){
   
           this.registrationForm.reset();
-          this.authService.userRole = res.data.userRole;
+          this.mainService.userRole = res.data.userRole;
           this.authService.storeToken(res.data.token);
-          this.router.navigate(['home']);
+          this.router.navigate([PAGE.HOME]);
         }
       })
 } else {
@@ -64,25 +65,25 @@ onSubmit(){
 }
 }
 
-imageUpload(event:any){
-  this.uploadImage = event.target.files[0]
- const formData = new FormData()
-  formData.append('file',this.uploadImage)
+}
+// imageUpload(event:any){
+//   this.uploadImage = event.target.files[0]
+//  const formData = new FormData()
+//   formData.append('file',this.uploadImage)
 
- this.authService.imageUpload(formData).subscribe((res:any)=>{
-  console.log(res);
-  this.registrationForm.value.pathToProfilePic =  environment.AUTH_API +res.data.pathToFile
-  this.picUpladed = true;
+//  this.authService.imageUpload(formData).subscribe((res:any)=>{
+//   console.log(res);
+//   this.registrationForm.value.pathToProfilePic =  environment.AUTH_API +res.data.pathToPic
+//   this.picUploaded = true;
   // PathToFileAttachment = AUTH_API + PathToFileAttachment;
-  this.imgPath = res.data
-  console.log(this.imgPath);
+  // this.imgPath = res.data
+  // console.log(this.imgPath);
   // this.chatService.sendImage(this.chatService.receiverEmail,this.imgPath,2,this.content)
   // this.chatService.sendImage(this.chatService.receiverEmail,this.filePath)
-},
-  (error:any) => {
-    console.log('Upload error:', error);
-  })
+// },
+//   (error:any) => {
+//     console.log('Upload error:', error);
+//   })
 
-}
+// }
 
-}

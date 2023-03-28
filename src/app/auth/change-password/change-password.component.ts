@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { PAGE } from 'src/app/utils/constants/link';
 
 @Component({
   selector: 'app-change-password',
@@ -52,7 +53,7 @@ onSubmit(){
 
     this.changePasswordForm.reset();
     // this.authService.storeToken(res.data );
-    this.router.navigate(['home']);
+    this.router.navigate([PAGE.HOME]);
     }
     }
   );

@@ -42,8 +42,8 @@
       <a mat-list-item (click)="homePage()">Home</a>
       <a mat-list-item (click)="menuPage()">Menu</a>
       <a mat-list-item (click)="ordersPage()">Orders</a>
-      <a mat-list-item  *ngIf="authService.userRole === 'admin'" (click)="addChefPage()">Add Chef</a>
-      <a mat-list-item *ngIf="authService.userRole === 'admin'" (click)="addFoodPage()">Add Food Item</a>
+      <a mat-list-item  *ngIf="mainService.userRole === 'admin'" (click)="addChefPage()">Add Chef</a>
+      <a mat-list-item *ngIf="mainService.userRole === 'admin'" (click)="addFoodPage()">Add Food Item</a>
     </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -55,48 +55,23 @@
         </mat-icon>
         
 
-        <span class="m-2 ">My App</span>
+        <span class="m-2 " (click)="homePage()">My App</span>
         <span class="example-spacer"></span>
         <span class="float-right justify-content-end m-2 p-2">
-<!--   
-          <button (click)="homePage()">Home</button>
-          <button (click)="menuPage()">Menu</button>
-          <button (click)="ordersPage()">Orders</button>
-          <button *ngIf="authService.userRole === 'admin'" (click)="addFoodPage()">Add Food Item</button>
-          <button *ngIf="authService.userRole === 'admin'" (click)="addChefPage()">Add Chef</button>
-          <button (click)="viewProfile()">View Profile</button>
-          <button (click)="updateProfile()">Update Profile</button>
-          <button (click)="changePassword()">Change Password</button>
-          <button (click)="signOut()">Log Out</button> -->
-          <!-- <button
-          type="button"
-          aria-label="Toggle sidenav"
-          mat-icon-button
-          
-         class="justify-content-end float-right"> -->
-         <mat-icon  aria-label="Side nav toggle icon" class="justify-content-start mr-2" (click)="viewProfile()" >person</mat-icon>
+
+          <mat-icon mat-icon-button [matMenuTriggerFor]="menu" class="justify-content-start mr-2" aria-label="Example icon-button with a menu">person</mat-icon>
+        <mat-menu #menu="matMenu">
+      
+          <a mat-menu-item (click)="viewProfile()" > View Profile</a>
+          <a mat-menu-item (click)="updateProfile()">Update Profile</a>
+          <a mat-menu-item (click)="changePassword()">Change Password</a>
+        </mat-menu>
+         <!-- <mat-icon  aria-label="Side nav toggle icon" class="justify-content-start mr-2" (click)="viewProfile()" >person</mat-icon> -->
             <mat-icon aria-label="Side nav toggle icon" class="justify-content-end float-right" (click)="signOut()">logout</mat-icon>
-         
-        <!-- </button> -->
+   
         </span>
       </mat-toolbar>
-        <!-- <mat-toolbar color="primary">
-            <button
-              type="button"
-              aria-label="Toggle sidenav"
-              mat-icon-button
-              (click)="drawer.toggle()"
-             *ngIf="!drawer.opened">
-              <mat-icon aria-label="Side nav toggle icon" >
-                menu
-              </mat-icon>
-              <ng-template #showCross>
-                <mat-icon aria-label="Side nav toggle icon">close</mat-icon>
-              </ng-template>
-            </button>
-            <span>web-doctor</span>
-          </mat-toolbar> -->
-    
+       
     
     </mat-sidenav-content>
 

@@ -13,6 +13,9 @@ import { AddFoodItemComponent } from './add-food-item/add-food-item.component';
 import { AddChefComponent } from './add-chef/add-chef.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
+import { MainRoutingModule } from './main-routing.module';
+import { AppRoutingModule } from '../app-routing.module';
+import { MainComponent } from './main/main.component';
 
 
 @NgModule({
@@ -24,14 +27,16 @@ import {MatSelectModule} from '@angular/material/select';
     ViewProfileComponent,
     UpdateProfileComponent,
     AddFoodItemComponent,
-    AddChefComponent
+    AddChefComponent,
+    MainComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     MatIconModule,
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MainRoutingModule
   ],
   exports:[
     MatIconModule

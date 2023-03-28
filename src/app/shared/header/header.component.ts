@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { MainService } from 'src/app/services/main.service';
+import { PAGE } from 'src/app/utils/constants/link';
 
 @Component({
   selector: 'app-header',
@@ -8,38 +10,38 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  constructor(public authService : AuthService , private router:Router, ){}
+  constructor(public authService : AuthService ,public mainService: MainService, private router:Router, ){}
   signOut(){
     this.authService.signOut();
     }
     
     changePassword()
     {
-      this.router.navigate(['change-password']);
+      this.router.navigate([PAGE.CHANGE_PASSWORD]);
     
     }
     viewProfile(){
-      this.router.navigate(['view-profile']);
+      this.router.navigate([PAGE.VIEW_PROFILE]);
     }
     updateProfile(){
-      this.router.navigate(['update-profile']);
+      this.router.navigate([PAGE.UPDATE_PROFILE]);
     }
     homePage(){
-      this.router.navigate(['home']);
+      this.router.navigate([PAGE.HOME]);
     }
     cartPage(){
-      this.router.navigate(['my-cart']);
+      this.router.navigate([PAGE.MY_CART]);
     }
     menuPage(){
-      this.router.navigate(['menu']);
+      this.router.navigate([PAGE.MENU]);
     }
     ordersPage(){
-      this.router.navigate(['orders']);
+      this.router.navigate([PAGE.ORDERS]);
     }
     addFoodPage(){
-      this.router.navigate(['add-food']);
+      this.router.navigate([PAGE.ADD_fOOD]);
     }
     addChefPage(){
-      this.router.navigate(['add-chef']);
+      this.router.navigate([PAGE.ADD_CHEF]);
     }
 }

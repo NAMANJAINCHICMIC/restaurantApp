@@ -6,23 +6,25 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { LoaderComponent } from './loader/loader.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+
 const material =[
   MatToolbarModule,
   MatIconModule,
   MatSidenavModule,
  MatCheckboxModule,
- MatListModule
+ MatListModule,
+ MatMenuModule
 
 ]
 @NgModule({
   declarations: [
     HeaderComponent,
-    LoaderComponent,
-    SidebarComponent
+    LoaderComponent
+
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,7 @@ const material =[
     material,
     HeaderComponent,
     LoaderComponent,
-    SidebarComponent
+
   ]
 })
 export class SharedModule { }

@@ -4,13 +4,14 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environment';
+import {APIS} from 'src/app/utils/constants/link'
 
 const AUTH_API = environment.AUTH_API;
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  userRole ?:string;
+  // userRole ?:string;
   constructor(private http: HttpClient , private router: Router) { }
   storeToken(tokenValue:string){
     localStorage.setItem('token',tokenValue)
@@ -31,7 +32,7 @@ export class AuthService {
   }
   login(email: string| null | undefined, password: string| null | undefined): Observable<any> {
     return this.http.post(
-      AUTH_API + 'api/v1/login',
+      AUTH_API + APIS.AUTH.SIGN_IN,
       {
         email,
         password,
@@ -42,27 +43,21 @@ export class AuthService {
 
   register(data:FormGroup): Observable<any> {
     return this.http.post(
-      AUTH_API + 'api/v1/user/register',
+      AUTH_API + APIS.AUTH.SIGN_UP,
    data.value
     );
   }
   forgetPassword(email: string| null | undefined): Observable<any> {
     return this.http.post(
-      AUTH_API + 'api/v1/forgetPassword'+ '?email='+email,
+      AUTH_API + APIS.AUTH.FORGOT_PASSWORD + '?email='+email,
       
       email
     );
   }
-  verifyUser(data:any): Observable<any> {
-    return this.http.post(
-      AUTH_API + 'api/v1/verify',
-      data,
-     
-    );
-  }
+
   resetPassword(otp: string| null | undefined,password: string| null | undefined,): Observable<any> {
     return this.http.post(
-      AUTH_API + 'api/v1/resetPassword',
+      AUTH_API + APIS.AUTH.RESET_PASSWORD,
       {otp,password},  
         {
         headers: new HttpHeaders({
@@ -75,14 +70,14 @@ export class AuthService {
   }
   changePassword(oldPassword: string| null | undefined,password: string| null | undefined): Observable<any> {
     return this.http.post(   
-      AUTH_API + 'api/v1/changePassword',
+      AUTH_API + APIS.MAIN.CHANGE_PASSWORD,
      {
       oldPassword,password
      },    
     );
   }
   logout(): Observable<any> {
-    return this.http.post(AUTH_API + 'api/v1/user/logout', { });
+    return this.http.post(AUTH_API + APIS.AUTH.LOGOUT, { });
   }
   signOut(){
     this.logout().subscribe(
@@ -95,20 +90,18 @@ export class AuthService {
       }}
     );
   }
-  imageUpload(file: any): Observable<any> {
-    const params = {
-      type: 2,
-    }
-    return this.http.post(
-      AUTH_API + 'api/v1/uploadFile', file, { params: params }
-    );
-  }
-  userProfile(){
-    return this.http.get(
-      AUTH_API + 'api/v1/getYourself'  
-    );
-  }
-  updateUserProfile(data:any):Observable<any>{
-    return this.http.put(AUTH_API + 'api/v1/users/update', data)
-  }
+  // imageUpload(file: any): Observable<any> {
+   
+  //   return this.http.post(
+  //     AUTH_API + APIS.MAIN.IMAGE_UPLOAD, file, 
+  //   );
+  // }
+  // userProfile(){
+  //   return this.http.get(
+  //     AUTH_API + APIS.MAIN.VIEW_PROFILE  
+  //   );
+  // }
+  // updateUserProfile(data:any):Observable<any>{
+  //   return this.http.put(AUTH_API + APIS.MAIN.UPDATE_PROFILE , data)
+  // }
 }

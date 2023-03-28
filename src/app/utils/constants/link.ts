@@ -1,1 +1,41 @@
 export const defaultImage = "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+export const APIS ={
+    AUTH:{
+        SIGN_IN:'api/v1/login',
+        SIGN_UP:'api/v1/user/register',
+        FORGOT_PASSWORD:'api/v1/forgetPassword',
+        RESET_PASSWORD:'api/v1/resetPassword',
+        LOGOUT:'api/v1/logout'
+    },
+    MAIN:{
+        HOME:'',
+        MENU:'',
+        ORDERS:'',
+        GET_ADMIN:'api/v1/admin/get',
+        REMOVE_BY_ADMIN:'api/v1/admin/removeUser',
+        REMOVE:'api/v1/usernchef/delete',
+        ADD_CHEF:'api/v1/admin/addChef',
+        ADD_fOOD:'api/v1/food/addFood',
+        GET_fOOD:'api/v1/food/get',
+        VIEW_PROFILE:'api/v1/getYourself',
+        UPDATE_PROFILE:'api/v1/update',
+        CHANGE_PASSWORD:'api/v1/changePassword',
+        IMAGE_UPLOAD:'api/v1/uploadProfilePic', 
+        FOOD_IMAGE_UPLOAD:'api/v1/uploadFoodPic', 
+    }
+}
+export const PAGE = {
+        SIGN_IN:'auth/sign-in',
+        SIGN_UP:'auth/sign-up',
+        FORGOT_PASSWORD:'auth/forgot-password',
+        RESET_PASSWORD:'auth/reset-password',
+        HOME:'main/main/home',
+        MENU:'main/main/menu',
+        MY_CART:'main/main/my-cart',
+        ORDERS:'main/main/orders',
+        ADD_CHEF:'main/main/add-chef',
+        ADD_fOOD:'main/main/add-food',
+        VIEW_PROFILE:'main/main/view-profile',
+        UPDATE_PROFILE:'main/main/update-profile',
+        CHANGE_PASSWORD:'main/main/change-password'
+}
