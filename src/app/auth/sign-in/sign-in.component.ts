@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient,  HttpHeaders } from '@angular/common/http';
 import { PAGE } from 'src/app/utils/constants/link';
 import { MainService } from 'src/app/services/main.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sign-in',
@@ -16,7 +17,7 @@ export class SignInComponent {
 
 
   showError = false;
-  constructor(private http: HttpClient, private router: Router, private authService: AuthService , private  mainService: MainService) {
+  constructor(private http: HttpClient,private toastr: ToastrService , private router: Router, private authService: AuthService , private  mainService: MainService) {
 
   }
   loginForm = new FormGroup(
@@ -47,8 +48,8 @@ export class SignInComponent {
  
       this.authService.login(email, password).subscribe(
         (res:any) => {
+          this.toastr.info(res.message);
           console.log(res);
-          alert(res.message);
           if (res.success) {
 
             this.loginForm.reset();

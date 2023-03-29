@@ -16,7 +16,7 @@ export class ViewProfileComponent implements OnInit {
     ngOnInit(): void {
     this.mainService.userProfile().subscribe((res:any)=>{
       this.myself =res?.data
-      console.log(res);
+      // console.log(res);
       // console.log(this.myself);
     })
     }

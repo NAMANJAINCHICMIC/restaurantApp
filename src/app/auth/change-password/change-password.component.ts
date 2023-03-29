@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { PAGE } from 'src/app/utils/constants/link';
 
@@ -14,7 +15,7 @@ export class ChangePasswordComponent {
   isConfirmPasswordDirty = false;
   confirmPasswordClass = 'form-control';
   showError= false;
-  constructor(private router: Router,private authService: AuthService ){}
+  constructor(private router: Router,private authService: AuthService , private toastr: ToastrService){}
   changePasswordForm = new FormGroup(
     {
       oldPassword: new FormControl('', Validators.required),
@@ -47,8 +48,8 @@ onSubmit(){
   // this.http.post('http://192.180.2.159:4040/api/v1/RegisterUser',this.registrationForm.value)
   this.authService.changePassword(oldPassword,password).subscribe(
     (res:any)=>{
-    console.log(res);
-    alert(res.message);
+ 
+    this.toastr.info(res.message);
     if(res.success){
 
     this.changePasswordForm.reset();

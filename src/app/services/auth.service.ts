@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environment';
 import {APIS} from 'src/app/utils/constants/link'
+import { ToastrService } from 'ngx-toastr';
 
 const AUTH_API = environment.AUTH_API;
 @Injectable({
@@ -12,7 +13,7 @@ const AUTH_API = environment.AUTH_API;
 })
 export class AuthService {
   // userRole ?:string;
-  constructor(private http: HttpClient , private router: Router) { }
+  constructor(private http: HttpClient ,private toastr: ToastrService , private router: Router) { }
   storeToken(tokenValue:string){
     localStorage.setItem('token',tokenValue)
   }
@@ -82,8 +83,7 @@ export class AuthService {
   signOut(){
     this.logout().subscribe(
       (res:any)=>{
-      console.log(res);
-      alert(res.message);
+        this.toastr.info(res.message);
       if (res.success){    
         localStorage.clear();
         this.router.navigate(['/']);

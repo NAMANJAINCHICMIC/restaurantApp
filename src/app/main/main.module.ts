@@ -16,7 +16,14 @@ import {MatSelectModule} from '@angular/material/select';
 import { MainRoutingModule } from './main-routing.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { MainComponent } from './main/main.component';
+import { ViewUsersComponent } from './view-users/view-users.component';
+import {NgxPaginationModule} from 'ngx-pagination';
 
+import { MainCourseComponent } from './main-course/main-course.component';
+import { DrinksComponent } from './drinks/drinks.component';
+
+import { DessertComponent } from './dessert/dessert.component';
+import { StartersComponent } from './starters/starters.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +35,14 @@ import { MainComponent } from './main/main.component';
     UpdateProfileComponent,
     AddFoodItemComponent,
     AddChefComponent,
-    MainComponent
+    MainComponent,
+    ViewUsersComponent,
+
+    MainCourseComponent,
+    DrinksComponent,
+
+    DessertComponent,
+     StartersComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +50,8 @@ import { MainComponent } from './main/main.component';
     MatIconModule,
     MatSelectModule,
     ReactiveFormsModule,
-    MainRoutingModule
+    MainRoutingModule,
+    NgxPaginationModule
   ],
   exports:[
     MatIconModule

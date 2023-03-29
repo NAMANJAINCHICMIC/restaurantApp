@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { PAGE } from 'src/app/utils/constants/link';
 
@@ -11,7 +12,7 @@ import { PAGE } from 'src/app/utils/constants/link';
 })
 export class ForgetPasswordComponent {
   showError= false;
-  constructor(private router: Router,private authService: AuthService ){}
+  constructor(private router: Router,private toastr: ToastrService ,private authService: AuthService ){}
   forgetForm = new FormGroup(
     {
       email: new FormControl('', [Validators.required,Validators.email]),
@@ -22,14 +23,14 @@ get controlName(){
 }
 onSubmit(){
   if (this.forgetForm.valid) {
-    console.log('form submitted');
+
   const { email} = this.forgetForm.value
-  console.log(this.forgetForm.value);
+
   // this.http.post('http://192.180.2.159:4040/api/v1/RegisterUser',this.registrationForm.value)
   this.authService.forgetPassword(email).subscribe(
     (res:any)=>{
-    console.log(res);
-    alert(res.message);
+   
+    this.toastr.info(res.message);
     if(res.success){
 
     this.forgetForm.reset();

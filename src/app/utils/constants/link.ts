@@ -11,7 +11,7 @@ export const APIS ={
         HOME:'',
         MENU:'',
         ORDERS:'',
-        GET_ADMIN:'api/v1/admin/get',
+        GET_USERS:'api/v1/admin/get',
         REMOVE_BY_ADMIN:'api/v1/admin/removeUser',
         REMOVE:'api/v1/usernchef/delete',
         ADD_CHEF:'api/v1/admin/addChef',
@@ -34,8 +34,10 @@ export const PAGE = {
         MY_CART:'main/main/my-cart',
         ORDERS:'main/main/orders',
         ADD_CHEF:'main/main/add-chef',
+        USERS:'main/main/users',
         ADD_fOOD:'main/main/add-food',
         VIEW_PROFILE:'main/main/view-profile',
+        VIEW_USERS:'main/main/view-users',
         UPDATE_PROFILE:'main/main/update-profile',
         CHANGE_PASSWORD:'main/main/change-password'
 }

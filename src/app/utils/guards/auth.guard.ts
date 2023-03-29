@@ -16,7 +16,10 @@ export class AuthGuard implements CanActivate {
     if ((path?.includes('home') || path?.includes('change-password') || path?.includes('menu')|| path?.includes('my-cart')|| path?.includes('orders')|| path?.includes('view-profile')|| path?.includes('update-profile'))&& !this.authService.isNotLoggedIn()) {
       return true;
     }
-    if ( ( path?.includes('add-food')|| path?.includes('add-chef'))&& !this.authService.isNotLoggedIn() && (this.mainService.userRole === role.admin) ){
+    if ( ( path?.includes('add-food')|| path?.includes('add-chef') || path?.includes('view-users'))&& !this.authService.isNotLoggedIn() && (this.mainService.userRole === role.admin) ){
+      return true;
+    }
+    if ( ( path?.includes('add-food'))&& !this.authService.isNotLoggedIn() && (this.mainService.userRole === role.chef) ){
       return true;
     }
     if ((path?.includes('sign-up') || path?.includes('sign-in')) && !this.authService.isNotLoggedIn()) {

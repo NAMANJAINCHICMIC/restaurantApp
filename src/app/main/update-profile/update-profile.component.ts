@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { MainService } from 'src/app/services/main.service';
 import { defaultImage, PAGE } from 'src/app/utils/constants/link';
@@ -31,7 +32,7 @@ export class UpdateProfileComponent implements OnInit{
   viewPassword(){
     this.visible = !this.visible;
   }
-  constructor(private router: Router , private http: HttpClient,private mainService: MainService){
+  constructor(private router: Router ,private toastr: ToastrService , private http: HttpClient,private mainService: MainService){
     this.updateProfileForm = new FormGroup(
       {
         firstName: new FormControl('', [Validators.required , Validators.minLength(3)]),
@@ -76,8 +77,7 @@ onSubmit(){
   // this.updateProfileForm.value.email="string";
   this.mainService.updateUserProfile(this.updateProfileForm.value).subscribe(
     (res:any)=>{
-      console.log(res)
-      alert(res.message);
+      this.toastr.info(res.message);
       if(res.success){
 
         this.router.navigate([PAGE.HOME]);

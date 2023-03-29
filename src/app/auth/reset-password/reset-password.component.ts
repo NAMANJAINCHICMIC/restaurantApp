@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { PAGE } from 'src/app/utils/constants/link';
 
@@ -15,7 +16,7 @@ export class ResetPasswordComponent {
   confirmPasswordClass = 'form-control';
   showError= false;
 
-  constructor(private router: Router,private authService: AuthService ){}
+  constructor(private router: Router ,private toastr: ToastrService,private authService: AuthService ){}
   resetForm = new FormGroup(
     { otp:new FormControl('', [Validators.required , Validators.minLength(6),Validators.maxLength(6),]),
       password: new FormControl('',[Validators.required , Validators.minLength(8),Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")]),
@@ -46,8 +47,7 @@ onSubmit(){
   // this.http.post('http://192.180.2.159:4040/api/v1/RegisterUser',this.registrationForm.value)
   this.authService.resetPassword(otp ,password).subscribe(
     (res :any)=>{
-    console.log(res);
-    alert(res.message);
+      this.toastr.info(res.message);
     if (res.success){ 
     this.resetForm.reset();
     localStorage.removeItem('resetToken');

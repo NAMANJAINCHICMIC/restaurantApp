@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { MainService } from 'src/app/services/main.service';
 import { defaultImage, PAGE } from 'src/app/utils/constants/link';
@@ -22,7 +23,7 @@ export class SignUpComponent {
   viewPassword(){
     this.visible = !this.visible;
   }
-  constructor(private router: Router , private http: HttpClient,private authService: AuthService , private  mainService: MainService){}
+  constructor(private router: Router ,private toastr: ToastrService, private http: HttpClient,private authService: AuthService , private  mainService: MainService){}
   
 
   registrationForm = new FormGroup(
@@ -48,8 +49,7 @@ onSubmit(){
     console.log('form submitted');
   console.log(this.registrationForm.value);
   this.authService.register(this.registrationForm).subscribe((res)=>{
-        console.log(res)
-        alert(res.message);
+    this.toastr.info(res.message);
         if(res.success){
   
           this.registrationForm.reset();

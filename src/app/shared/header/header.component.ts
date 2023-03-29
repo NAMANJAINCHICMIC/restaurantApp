@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { MainService } from 'src/app/services/main.service';
 import { PAGE } from 'src/app/utils/constants/link';
+import { role } from 'src/app/utils/constants/role';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +11,7 @@ import { PAGE } from 'src/app/utils/constants/link';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  ROLE =role
   constructor(public authService : AuthService ,public mainService: MainService, private router:Router, ){}
   signOut(){
     this.authService.signOut();
@@ -43,5 +45,8 @@ export class HeaderComponent {
     }
     addChefPage(){
       this.router.navigate([PAGE.ADD_CHEF]);
+    }
+    getUsers(){
+      this.router.navigate([PAGE.VIEW_USERS])
     }
 }

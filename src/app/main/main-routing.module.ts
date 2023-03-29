@@ -14,6 +14,8 @@ import { OrdersComponent } from './orders/orders.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { ViewProfileComponent } from './view-profile/view-profile.component';
 import { MainComponent } from './main/main.component';
+import { ViewUsersComponent } from './view-users/view-users.component';
+
 
 const routes: Routes = [
   {
@@ -59,6 +61,11 @@ const routes: Routes = [
           {
             path: 'add-chef',
             component: AddChefComponent,
+            canActivate: [AuthGuard],
+          },
+          {
+            path: 'view-users',
+            component: ViewUsersComponent,
             canActivate: [AuthGuard],
           },
           {

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { MainService } from 'src/app/services/main.service';
 import { PAGE } from 'src/app/utils/constants/link';
@@ -21,7 +22,9 @@ export class AddFoodItemComponent {
 //     timeToPrepare: FormControl<string | null>,
 //     pathToPic: FormControl<string | null>
 // }>;
+
   foodItem:any;
+
   uploadImage : Blob | string=''
   // imgPath='';
   picUpladed = false;
@@ -38,7 +41,7 @@ export class AddFoodItemComponent {
   //   this.visible = !this.visible;
   // }
 
-  constructor(private router: Router , private http: HttpClient,private mainService: MainService){
+  constructor(private router: Router ,private toastr: ToastrService, private http: HttpClient,private mainService: MainService){
     // this.addFoodForm = new FormGroup(
     //   {
     //     foodName: new FormControl('', [Validators.required ]),
@@ -87,12 +90,10 @@ get controlName(){
 
 onSubmit(){
   if (this.addFoodForm.valid ) {
-    console.log('form submitted');
-  console.log(this.addFoodForm.value);
+   
   this.mainService.addFood(this.addFoodForm.value).subscribe(
     (res:any)=>{
-      console.log(res)
-      alert(res.message);
+      this.toastr.info(res.message);
       if(res.success){
 
         this.router.navigate([PAGE.HOME]);
@@ -118,8 +119,9 @@ imageUpload(event:any){
 this.picUpladed = true;
 },
   (error:any) => {
-    console.log('Upload error:', error);
+    this.toastr.error(error,'error');
   })
 
 }
+
 }
