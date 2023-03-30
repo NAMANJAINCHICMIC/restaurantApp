@@ -16,11 +16,15 @@ export class ViewUsersComponent implements OnInit {
   defaultImage = defaultImage;
    constructor(private mainService : MainService){}
    ngOnInit(): void {
-   this.mainService.getUsers(this.page).subscribe((res:any)=>{
-    this.totalItems = res?.data?.totalAvailableRecords
-     this.usersList =res?.data?.list
-     console.log(res);
-     console.log(this.usersList);
-   })
+   this.getUsers(this.page)
+   }
+   getUsers(page:number){
+    // this.page =page
+    this.mainService.getUsers(this.page).subscribe((res:any)=>{
+      this.totalItems = res?.data?.totalAvailableRecords
+       this.usersList =res?.data?.list
+       console.log(res);
+       console.log(this.usersList);
+     })
    }
  }

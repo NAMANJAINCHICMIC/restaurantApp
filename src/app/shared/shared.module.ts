@@ -10,6 +10,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
+import { CartFooterComponent } from './cart-footer/cart-footer.component';
 
 const material =[
   MatToolbarModule,
@@ -23,7 +24,8 @@ const material =[
 @NgModule({
   declarations: [
     HeaderComponent,
-    LoaderComponent
+    LoaderComponent,
+    CartFooterComponent
 
   ],
   imports: [
@@ -36,7 +38,7 @@ const material =[
     material,
     HeaderComponent,
     LoaderComponent,
-
+CartFooterComponent
   ]
 })
 export class SharedModule { }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environment';
 import { APIS } from '../utils/constants/link';
 import { Cart } from '../utils/models/cart';
@@ -14,7 +14,14 @@ const AUTH_API = environment.AUTH_API;
 })
 export class MainService {
   userRole ?:string;
-  constructor(private http: HttpClient , private router: Router) { }
+  showCart = true;
+  cartObj :Cart | null = null;
+  onCartPageSub = new BehaviorSubject<boolean>(false);
+  onConfirmOrderPageSub = new BehaviorSubject<boolean>(false);
+  cartDataSub = new BehaviorSubject<Cart|null>(null);
+  constructor(private http: HttpClient , private router: Router) { 
+    this.cartObj = this.getCartDataConverted();
+  }
 
    imageUpload(file: any): Observable<any> {
    
@@ -55,7 +62,7 @@ export class MainService {
       AUTH_API + APIS.MAIN.GET_fOOD+`?PageNumber=${page}`
     );
   }
-  getFoodByCategory(page:any,category:string){
+  getFoodByCategory(page:number,category:string){
     return this.http.get(
       AUTH_API + APIS.MAIN.GET_fOOD+`?PageNumber=${page}&category=${category}`
     );
@@ -64,110 +71,168 @@ export class MainService {
 
 
   //
-  cartObj :any;
+
   addOrUpdate(item: any) {
     // get cart data from local storage
-  
-
+  console.log(item)
+    this.cartObj = this.getCartDataConverted();
     // add cart object for the first time
-    if (this.cartObj == null) {
+    if (!this.cartObj) {
       const cart: Cart = {
         items: {
-            addedOn: new Date().toLocaleString(),
+          [item.foodId]:{
+
             quantity: item.quantity,
-            itemId: item.id,
+            itemId: item.foodId,
             category: item.category,
-            name: item.name,
+            name: item.foodName,
             price: item.price,
-            imageUrl: item.imageUrl,
+            imageUrl: item.pathToPic,
+            timeToPrepare:item.timeToPrepare
+          },
           },
        
         totalAmt: item.price,
       };
-
+      this.addCartData(cart);
       
     } else {
       // add a new item to cart
-      if (this.cartObj.items[item.id] == undefined) {
+      if (!this.cartObj.items[item.foodId]) {
         const itemD: any = {
-          [item.id]: {
-            addedOn: new Date().toLocaleString(),
+          [item.foodId]: {
+           
             quantity: item.quantity,
-            itemId: item.id,
+            itemId: item.foodId,
             category: item.category,
-            name: item.name,
+            name: item.foodName,
             price: item.price,
-            imageUrl: item.imageUrl,
+            imageUrl: item.pathToPic,
+            timeToPrepare:item.timeToPrepare
           },
         };
-
-        // any better way?
         this.cartObj = {
           items: {
             ...this.cartObj.items,
-            [item.id]: itemD[item.id],
+            [item.foodId]: itemD[item.foodId],
           },
           totalAmt: this.getCartTotalAmount(item.price, true),
         };
-
+        this.addCartData(this.cartObj );
 
       } else {
-        // update quantity for existing item
-        const itemD = this.cartObj.items[item.id];
+ 
+        const itemD = this.cartObj.items[item.foodId];
         itemD.quantity += 1;
-        this.cartObj.items[item.id] = itemD;
+        this.cartObj.items[item.foodId] = itemD;
 
-        // update total amount
         this.cartObj.totalAmt = this.getCartTotalAmount(item.price, true);
 
-
+        this.addCartData(this.cartObj);
       }
     }
   }
 
-  /** remove an item from cart */
+ 
   removeItem(item: any) {
     
-
-    if (this.cartObj != null) {
-      const itemD = this.cartObj.items[item.id];
+    this.cartObj = this.getCartDataConverted();
+    
+    if (this.cartObj) {
+      const itemD = this.cartObj.items[item.foodId];
 
       if (itemD.quantity > 1) {
-        // decrease the quantity
+    
         itemD.quantity -= 1;
-        this.cartObj.items[item.id] = itemD;
+        this.cartObj.items[item.foodId] = itemD;
       } else if (itemD.quantity == 1) {
-        // when quantity is 1
-        // remove the item
-        delete this.cartObj.items[item.id];
+      
+        delete this.cartObj.items[item.foodId];
       }
 
       this.cartObj.totalAmt = this.getCartTotalAmount(item.price, false);
     }
-
+    this.addCartData(this.cartObj);
 
   }
 
-  /** calculate total cart amount */
+  
   getCartTotalAmount(price: number, add: boolean): number {
     let amt: number;
 
     if (add == true) {
-      amt = Number(this.cartObj.totalAmt) + Number(price);
+      amt = Number(this.cartObj?.totalAmt) + Number(price);
     } else {
-      amt = Number(this.cartObj.totalAmt) - Number(price);
+      amt = Number(this.cartObj?.totalAmt) - Number(price);
     }
 
     return amt;
   }
 
-  /** check for cart data in local storage or Firebase */
- 
+  /** check for cart data in local storage */
+  getCartDataConverted() {
+    if (this.getCartData()) {
+      return JSON.parse(this.getCartData()||'{}');
+    }
 
-  /** clear cart */
-  clearCart() {
-    this.cartObj = null;
-    
+    return null;
   }
 
+
+  
+  clearCart() {
+    this.cartObj = null;
+    this.removeCartData();
+  }
+
+
+
+  onCartPageObs() {
+    this.onCartPageSub.next(false);
+    return this.onCartPageSub.asObservable();
+  }
+
+  goToOrders(v: boolean) {
+    this.onCartPageSub.next(v);
+  }
+
+  onConfirmOrderPageObs() {
+    return this.onConfirmOrderPageSub.asObservable();
+  }
+
+  hideCartBar(v: boolean) {
+    this.onConfirmOrderPageSub.next(v);
+  }
+
+  // cart locol storage
+  addCartData(cart: Cart |null) {
+    console.log("addCart",cart)
+    localStorage.setItem('cartData', JSON.stringify(cart));
+
+    const obj = JSON.parse(localStorage.getItem('cartData') || '{}');
+// console.log("obj",obj)
+    // check if items in cart is empty
+    if (Object.keys(obj.items).length == 0) {
+      this.removeCartData();
+    }else{
+
+      this.cartDataSub.next(JSON.parse(this.getCartData()||'{}'));
+    }
+  }
+
+  removeCartData() {
+    if (localStorage.getItem('cartData')) {
+      localStorage.removeItem('cartData');
+    }
+    this.cartDataSub.next(this.cartObj);
+  }
+
+  getCartData() {
+    return localStorage.getItem('cartData');
+  }
+
+  getCartDataObservable() {
+    this.cartDataSub.next(JSON.parse(this.getCartData() || '{}')== '{}' ?JSON.parse(this.getCartData() || '{}'):this.cartObj);
+    return this.cartDataSub.asObservable();
+  }
 }

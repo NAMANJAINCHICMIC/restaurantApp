@@ -42,6 +42,7 @@
       <a mat-list-item (click)="homePage()" (click)="drawer.toggle()">Home</a>
       <a mat-list-item (click)="menuPage()" (click)="drawer.toggle()">Menu</a>
       <a mat-list-item (click)="ordersPage()" (click)="drawer.toggle()">Orders</a>
+      <a mat-list-item *ngIf="mainService.userRole === ROLE.user &&   this.mainService.showCart" (click)="cartPage()" (click)="drawer.toggle()">My Cart</a>
       <a mat-list-item  *ngIf="mainService.userRole === ROLE.admin" (click)="getUsers()" (click)="drawer.toggle()">View Users</a>
       <a mat-list-item  *ngIf="mainService.userRole === ROLE.admin" (click)="addChefPage()">Add Chef</a>
       <a mat-list-item *ngIf="(mainService.userRole === ROLE.admin) || (mainService.userRole === ROLE.chef)" (click)="addFoodPage()" (click)="drawer.toggle()">Add Food Item</a>

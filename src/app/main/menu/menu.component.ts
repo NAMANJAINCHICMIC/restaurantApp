@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from 'src/app/services/main.service';
+import { CATEGORY } from 'src/app/utils/constants/role';
+import { Cart } from 'src/app/utils/models/cart';
 
 @Component({
   selector: 'app-menu',
@@ -7,25 +9,24 @@ import { MainService } from 'src/app/services/main.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-  starters: any[] = [];
-  mains: any[] = [];
-  alcoholicBeverages: any[] = [];
-  desserts: any[] = [];
-
+ 
   isLoading: boolean = true;
   isLoaded: boolean = false;
-  onAdd(data:any){}
-  onRemove(data:any){}
+
+  // foodList :any;
   foodList :any;
-  _foodList :any;
   page = 1;
 
   itemsPerPage = 15;
   totalItems : any; 
 
+    CATEGORY = CATEGORY;
+    cartData ?:Cart|null;
+  currentCategory =CATEGORY.STARTERS 
+
    constructor(private mainService : MainService){}
    ngOnInit(): void {
-    this.getFoodByCategory('Starters')
+    this.getFoodByCategory(this.page,this.currentCategory)
    }
 
    getFood(){
@@ -36,41 +37,65 @@ export class MenuComponent implements OnInit {
       //  console.log(this.usersList);
      })
    }
-   getFoodByCategory(category:string){
-
-    this.mainService.getFoodByCategory(this.page,category).subscribe((res:any)=>{
+   getFoodByCategoryInit( page:number,category:string ){
+    this.mainService.getFoodByCategory(page,category).subscribe((res:any)=>{
       this.totalItems = res?.data?.totalAvailableRecords
-       this._foodList =res?.data?.list
+       this.foodList =res?.data?.list
        console.log(res);
        this.isLoading= false;
        this.isLoaded= true;
       //  console.log(this.foodList);
-     })
-
+      this.mergeItemAndCartData()
+    })
+    
+   }
+   getFoodByCategory( page:number,category:string ){
+    this.page = page
+    this.currentCategory =category
+    
+    this.getFoodByCategoryInit(  this.page, this.currentCategory)
+    
+   }
+   getFoodByPage( page:number){
+    this.page = page
+    this.getFoodByCategoryInit(  this.page, this.currentCategory)
+    
    }
 
-   cartData :any
    fetchCartData() {
-     this.cartData = this.mainService.cartObj
+     this.cartData = this.mainService.getCartDataConverted();
    }
    
 mergeItemAndCartData() {
   this.fetchCartData();
 
-  for (let key in this._foodList) {
+  for (let key in this.foodList) {
     let count = 0;
-    const id = this._foodList[key].id;
+    const id = this.foodList[key]?.foodId;
 
     if (this.cartData != null) {
-      const itemDetailsObj = this.cartData.items[id];
+      const itemDetailsObj = this.cartData?.items[id];
       if (
         itemDetailsObj != undefined &&
-        itemDetailsObj.quantity != undefined
+        itemDetailsObj?.quantity != undefined
       ) {
-        count = this.cartData.items[id].quantity;
+        count = this.cartData?.items[id]?.quantity;
       }
     }
-
-    this.foodList[key] = { ...this._foodList[key], quantity: count };
+// console.log("run")
+    this.foodList[key].quantity=count;
+    // console.log(this.foodList)
   }}
+
+  onAdd(item: any) {
+    // console.log(item)
+    item.quantity += 1; 
+    this.mainService.addOrUpdate(item);    
+  }
+
+ 
+  onRemove(item: any) {
+    item.quantity -= 1; 
+    this.mainService.removeItem(item);
+  }
 }

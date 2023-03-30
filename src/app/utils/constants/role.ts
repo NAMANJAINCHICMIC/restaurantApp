@@ -5,7 +5,7 @@ export const role ={
 }
 export const CATEGORY = {
     STARTERS : 'Starters',
-    MAIN_COURSE :'Maincourse',
+    MAIN_COURSE :'Main course',
     DESSERT :  'Dessert',
     DRINKS : 'Drinks'
 }

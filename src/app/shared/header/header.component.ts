@@ -13,6 +13,8 @@ import { role } from 'src/app/utils/constants/role';
 export class HeaderComponent {
   ROLE =role
   constructor(public authService : AuthService ,public mainService: MainService, private router:Router, ){}
+
+  
   signOut(){
     this.authService.signOut();
     }

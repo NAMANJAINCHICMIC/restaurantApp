@@ -15,15 +15,16 @@
                     <div class="card mb-3 mx-auto" style="max-width: 700px;" *ngIf="item.quantity > 0">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <img class="item-image" [src]="item.imageUrl">
+                                <img class="item-image" [src]="item.pathToPic">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{item.name}}</h5>
+                                    <h5 class="card-title">{{item.foodName}}</h5>
                                     <span class="badge bg-light text-dark item-category">{{item.category}}</span>
                                     <p class="card-text item-price">
                                         ₹{{item.price}} × {{item.quantity}} = ₹{{getItemTotalAmount(item.price, item.quantity)}}
                                     </p>
+                                    
                                     <div class="btn-toolbar" role="toolbar" *ngIf="item.quantity > 0">
                                         <div class="btn-group" role="group" aria-label="-">
                                             <span type="button" class="btn btn-outline-danger btn-sm" (click)="onRemove(item)">-</span>
@@ -40,6 +41,11 @@
                 <div class="text-center cart-btn-group">
                     <div class="form-group">
                         <button class="btn btn-outline-danger" (click)="clearCart()">Clear cart</button>
+                    </div>
+                </div>
+                <div class="text-center cart-btn-group">
+                    <div class="form-group">
+                        <button class="btn btn-outline-danger" (click)="placeOrder()">Place Order</button>
                     </div>
                 </div>
 
