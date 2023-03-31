@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environment';
 import {APIS} from 'src/app/utils/constants/link'
 import { ToastrService } from 'ngx-toastr';
+import { MainService } from './main.service';
 
 const AUTH_API = environment.AUTH_API;
 @Injectable({
@@ -13,7 +14,7 @@ const AUTH_API = environment.AUTH_API;
 })
 export class AuthService {
   // userRole ?:string;
-  constructor(private http: HttpClient ,private toastr: ToastrService , private router: Router) { }
+  constructor(private http: HttpClient ,private toastr: ToastrService , private router: Router , private mainService: MainService) { }
   storeToken(tokenValue:string){
     localStorage.setItem('token',tokenValue)
   }
@@ -89,6 +90,7 @@ export class AuthService {
         this.router.navigate(['/']);
       }}
     );
+    this.mainService.cartObj = null;
   }
   // imageUpload(file: any): Observable<any> {
    

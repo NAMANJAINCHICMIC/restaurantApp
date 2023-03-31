@@ -10,7 +10,8 @@ export const APIS ={
     MAIN:{
         HOME:'',
         MENU:'',
-        ORDERS:'',
+        GET_ORDERS_BY_USER:'api/v1/order/userGet',
+        GET_ORDERS_BY_ADMINCHEF:'api/v1/order/adminChefGet',
         GET_USERS:'api/v1/admin/get',
         REMOVE_BY_ADMIN:'api/v1/admin/removeUser',
         REMOVE:'api/v1/usernchef/delete',

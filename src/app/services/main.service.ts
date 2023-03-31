@@ -16,6 +16,8 @@ export class MainService {
   userRole ?:string;
   showCart = true;
   cartObj :Cart | null = null;
+  orderDetail = new BehaviorSubject<any>(null);
+  allOrderDetail = new BehaviorSubject<any>(null);
   onCartPageSub = new BehaviorSubject<boolean>(false);
   onConfirmOrderPageSub = new BehaviorSubject<boolean>(false);
   cartDataSub = new BehaviorSubject<Cart|null>(null);
@@ -67,11 +69,38 @@ export class MainService {
       AUTH_API + APIS.MAIN.GET_fOOD+`?PageNumber=${page}&category=${category}`
     );
   }
-
-
-
-  //
-
+  chefGetOrderDetail(orderId:any){
+     this.http.get(
+      AUTH_API + APIS.MAIN.GET_ORDERS_BY_ADMINCHEF+`?orderId=${orderId}`
+    ).subscribe((res:any)=>{
+      // this.orderDetail = res?.data?.totalAvailableRecords
+      //  this.usersList =res?.data?.list
+       console.log("orderdetail",res);
+       this.orderDetail.next(res?.data?.list[0])
+      //  console.log(this.usersList);
+     });
+  }
+  userGetOrderDetail(orderId:any){
+     this.http.get(
+      AUTH_API + APIS.MAIN.GET_ORDERS_BY_USER+`?orderId=${orderId}`
+    ).subscribe((res:any)=>{
+      // this.orderDetail = res?.data?.totalAvailableRecords
+      //  this.usersList =res?.data?.list
+       console.log("orderdetail",res);
+       this.orderDetail.next(res?.data?.list[0])
+      //  console.log(this.usersList);
+     });
+  }
+  userGetAllOrderDetail(page:number){
+    return this.http.get(
+      AUTH_API + APIS.MAIN.GET_ORDERS_BY_USER+`?PageNumber=${page}`
+      );
+  }
+  adminGetAllOrderDetail(page:number){
+    return this.http.get(
+      AUTH_API + APIS.MAIN.GET_ORDERS_BY_ADMINCHEF+`?PageNumber=${page}`
+      );
+  }
   addOrUpdate(item: any) {
     // get cart data from local storage
   console.log(item)
@@ -187,22 +216,22 @@ export class MainService {
 
 
 
-  onCartPageObs() {
-    this.onCartPageSub.next(false);
-    return this.onCartPageSub.asObservable();
-  }
+  // onCartPageObs() {
+  //   this.onCartPageSub.next(false);
+  //   return this.onCartPageSub.asObservable();
+  // }
 
-  goToOrders(v: boolean) {
-    this.onCartPageSub.next(v);
-  }
+  // goToOrders(v: boolean) {
+  //   this.onCartPageSub.next(v);
+  // }
 
-  onConfirmOrderPageObs() {
-    return this.onConfirmOrderPageSub.asObservable();
-  }
+  // onConfirmOrderPageObs() {
+  //   return this.onConfirmOrderPageSub.asObservable();
+  // }
 
-  hideCartBar(v: boolean) {
-    this.onConfirmOrderPageSub.next(v);
-  }
+  // hideCartBar(v: boolean) {
+  //   this.onConfirmOrderPageSub.next(v);
+  // }
 
   // cart locol storage
   addCartData(cart: Cart |null) {
@@ -212,7 +241,7 @@ export class MainService {
     const obj = JSON.parse(localStorage.getItem('cartData') || '{}');
 // console.log("obj",obj)
     // check if items in cart is empty
-    if (Object.keys(obj.items).length == 0) {
+    if (!Object.keys(obj.items).length) {
       this.removeCartData();
     }else{
 

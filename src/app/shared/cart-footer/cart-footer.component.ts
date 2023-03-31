@@ -13,7 +13,7 @@ export class CartFooterComponent  {
   totalAmt?: number;
   totalItems?: number;
   goToOrders: boolean = false;
-  hideCartBar: boolean = true;
+  // hideCartBar: boolean = true;
 
   constructor(
     private mainService: MainService,
@@ -28,11 +28,13 @@ export class CartFooterComponent  {
         this.isCartEmpty = true;
         this.totalAmt = data.totalAmt;
         this.totalItems = Object.keys(data.items).length;
-      }
-      if (!Object.keys(data.items).length) {
-        // console.log("notdata")
+      }else{
         this.isCartEmpty = false;
       }
+      // if (!Object.keys(data.items).length) {
+      //   // console.log("notdata")
+      //   this.isCartEmpty = false;
+      // }
     });
   }
 
@@ -41,18 +43,18 @@ export class CartFooterComponent  {
     this.router.navigate([PAGE.MY_CART]);
   }
 
-  placeOrder() {
-    this.router.navigate(['confirm-order']);
-  }
+  // placeOrder() {
+  //   this.router.navigate(['confirm-order']);
+  // }
   cartDetails(){
     const data = this.mainService.cartObj
     console.log(data)
-    if (data != null && Object.keys(data.items).length > 0) {
+    if (data && Object.keys(data.items).length > 0) {
             this.isCartEmpty = true;
             this.totalAmt = data.totalAmt;
             this.totalItems = Object.keys(data.items).length;         
           }
-          if (data == null) {
+          if (!data) {
             this.isCartEmpty = false;
           }
   }

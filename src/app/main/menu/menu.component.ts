@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from 'src/app/services/main.service';
-import { CATEGORY } from 'src/app/utils/constants/role';
+import { SocketService } from 'src/app/services/socket.service';
+import { CATEGORY, role } from 'src/app/utils/constants/role';
 import { Cart } from 'src/app/utils/models/cart';
 
 @Component({
@@ -12,11 +13,13 @@ export class MenuComponent implements OnInit {
  
   isLoading: boolean = true;
   isLoaded: boolean = false;
-
+  isChecked: boolean = false;
+  updatedFoodId?:string
+  updatedFoodStatus?:boolean
   // foodList :any;
   foodList :any;
   page = 1;
-
+  role = role;
   itemsPerPage = 15;
   totalItems : any; 
 
@@ -24,9 +27,15 @@ export class MenuComponent implements OnInit {
     cartData ?:Cart|null;
   currentCategory =CATEGORY.STARTERS 
 
-   constructor(private mainService : MainService){}
+   constructor(public mainService : MainService , private socketService : SocketService){}
    ngOnInit(): void {
-    this.getFoodByCategory(this.page,this.currentCategory)
+    this.getFoodByCategory(this.page,this.currentCategory);
+    this.socketService.foodUpdated.subscribe((res:any)=>{
+      console.log(res);
+      this.updatedFoodId = res.foodId
+      this.updatedFoodStatus = res.status
+      this.updateStatus()
+    })
    }
 
    getFood(){
@@ -44,7 +53,7 @@ export class MenuComponent implements OnInit {
        console.log(res);
        this.isLoading= false;
        this.isLoaded= true;
-      //  console.log(this.foodList);
+       console.log(this.foodList);
       this.mergeItemAndCartData()
     })
     
@@ -73,11 +82,10 @@ mergeItemAndCartData() {
     let count = 0;
     const id = this.foodList[key]?.foodId;
 
-    if (this.cartData != null) {
+    if (this.cartData) {
       const itemDetailsObj = this.cartData?.items[id];
       if (
-        itemDetailsObj != undefined &&
-        itemDetailsObj?.quantity != undefined
+        itemDetailsObj?.quantity 
       ) {
         count = this.cartData?.items[id]?.quantity;
       }
@@ -86,6 +94,15 @@ mergeItemAndCartData() {
     this.foodList[key].quantity=count;
     // console.log(this.foodList)
   }}
+  updateStatus(){
+    for (let key in this.foodList) {
+      if(this.foodList[key]?.foodId == this.updatedFoodId){
+        this.foodList[key].status = this.updatedFoodStatus
+        console.log("res");
+      }
+    }
+
+  }
 
   onAdd(item: any) {
     // console.log(item)
@@ -97,5 +114,14 @@ mergeItemAndCartData() {
   onRemove(item: any) {
     item.quantity -= 1; 
     this.mainService.removeItem(item);
+  }
+
+  foodStatus(boolValue : boolean, foodId :string){
+    const obj = {
+      foodId:foodId,
+      status:boolValue
+    }
+this.socketService.chefChangeFoodStatus(obj);
+console.log("status")
   }
 }

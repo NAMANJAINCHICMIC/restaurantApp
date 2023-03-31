@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MainService } from 'src/app/services/main.service';
 import { SocketService } from 'src/app/services/socket.service';
+import { PAGE } from 'src/app/utils/constants/link';
 import { Cart } from 'src/app/utils/models/cart';
 
 @Component({
@@ -12,38 +13,42 @@ import { Cart } from 'src/app/utils/models/cart';
 export class CartComponent implements OnInit{
   
   cartArray: any[] = [];
-  isCartEmpty: boolean = true;
-  // getItemTotalAmount(price: number, quantity: number) {
-  //   return Number(price) * Number(quantity);
-  // }
-  // onAdd(data:any){}
-  // onRemove(data:any){}
-  // clearCart(){}
-
+  isCartEmpty: boolean = false;
+  orderDetails:any={};
     cartObj: Cart | null;
-    // cartArray: any[] = [];
-    // isCartEmpty: boolean = true;
-  
+    totalAmt?: number;
+    totalItems?: number;
+
     constructor(
-  
       private mainService: MainService,
       private router: Router,
       private socketService :SocketService
     ) {
       this.cartObj = JSON.parse(this.mainService.getCartData()||'{}');
+
+      this.mainService.getCartDataObservable().subscribe((data:any) => {
+        // here data is cart data object
+        // console.log("obs",Object.keys(data.items))
+        if (data && Object.keys(data.items).length > 0) {
+          // console.log("data",(data.items))
+          this.isCartEmpty = true;
+          this.totalAmt = data.totalAmt;
+          this.totalItems = Object.keys(data.items).length;
+        }
+        else{
+          this.isCartEmpty = false;
+        }
+      
+      });
     }
   
     ngOnInit(): void {
-      this.populateCartData();
-      // hide bottom cart bar when viewing cart page
-     
+      this.populateCartData();    
     }
-  
    
-  
     populateCartData() {
       if (this.cartObj  && this.cartObj.items ) {
-        this.isCartEmpty = false;
+        this.isCartEmpty = true;
         const itemD = this.cartObj.items;
   
         for (let item in itemD) {
@@ -62,7 +67,7 @@ export class CartComponent implements OnInit{
           this.cartArray.push(obj);
         }
       } else {
-        this.isCartEmpty = true;
+        this.isCartEmpty = false;
       }
       console.log("itemObj",this.cartArray)
     }
@@ -81,8 +86,8 @@ export class CartComponent implements OnInit{
       // if not items in cart
       // set isCartEmpty to true
       this.cartObj = JSON.parse(this.mainService.getCartData()||'{}');
-      if(this.cartObj == null) {
-        this.isCartEmpty = true;
+      if(!this.cartObj) {
+        this.isCartEmpty = false;
       }
     }
   
@@ -91,12 +96,12 @@ export class CartComponent implements OnInit{
     }
    
     clearCart() {
-      this.isCartEmpty = true;
+      this.isCartEmpty = false;
       this.cartArray = [];
       this.cartObj = null;
       this.mainService.clearCart();
     }
-    orderDetails:any={};
+
     orderDetailsChanged() {
 
       this.orderDetails.list=[];
@@ -112,5 +117,7 @@ export class CartComponent implements OnInit{
       this.orderDetailsChanged()
       this.socketService.userPlaceOrder(this.orderDetails)
       // console.log(this.orderDetails);
+      this.clearCart()
+      this.router.navigate([PAGE.ORDERS]);
     }
 }

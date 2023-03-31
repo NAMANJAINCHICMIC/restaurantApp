@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment } from 'src/environment';
+import { ToastrService } from 'ngx-toastr';
+import { MainService } from './main.service';
+import { role } from '../utils/constants/role';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +13,9 @@ import { environment } from 'src/environment';
 export class SocketService {
   public hubConnection: signalR.HubConnection | any;
   onlineUsers: Array<any> = [];
-  constructor() { }
+  isReady = false;
+  foodUpdated = new Subject<any>;
+  constructor(private toastr: ToastrService , private mainService : MainService) { }
 
   stopChatConnection() {
     this.hubConnection?.stop().catch((error: any) => console.log(error));
@@ -48,10 +54,13 @@ foodHubListener(){
   });
   this.hubConnection.on('Message', (message:string) => {
   // this function is used to show incoming messages to user
+  this.toastr.info(message);
   console.log(message);
   });
   this.hubConnection.on('UserOrderStatus', (order:any) => {
     // user gets status of his order
+    // this.toastr.info(order);
+    this.mainService.userGetOrderDetail(order?.orderId);
   console.log(order);
   });
   this.hubConnection.on('MessageError', (error: string) => {
@@ -60,11 +69,17 @@ foodHubListener(){
   });
   this.hubConnection.on('ChefReceivedOrder', (orderOutput:any) => {
     // random chef receives order from server
+    if(this.mainService.userRole == role.chef){
+      this.toastr.info("New Order Recieved");
+this.mainService.chefGetOrderDetail(orderOutput?.orderId);
+    }
+    
   console.log(orderOutput);
   });
-  this.hubConnection.on('UpdateFood', (food:any) => {
+  this.hubConnection.on('UpdateFoods', (food:any) => {
     // changed status of food is updated here
-  console.log(food);
+  console.log("update ",food);
+  this.foodUpdated.next(food);
   });
 
   
@@ -80,11 +95,14 @@ chefConfirmedOrder(chefConfirmOrder:any){
   this.hubConnection?.send("ChefConfirmOrder", chefConfirmOrder).catch((error: any) => {
     console.log('error of ChefConfirmOrder');
   });
+  this.isReady=true
 }
 chefCompleteOrder(orderId:string){
-  this.hubConnection?.send("ChefCompleteOrder", orderId).catch((error: any) => {
+  this.hubConnection?.send("ChefCompletesOrder", orderId).catch((error: any) => {
     console.log('error of ChefCompleteOrder');
   });
+  this.isReady=false;
+  console.log('ChefCompleteOrder');
 }
 chefChangeFoodStatus(changeFoodStatus:any){
   // changeFoodStatus -- is { Guid/string - foodId:"",  bool status:t/f}

@@ -1,67 +1,98 @@
 <!-- <app-header></app-header> -->
 <main class="my-order-page">
     <div class="album py-5">
-        <div class="container">
+        <div class="container" *ngIf="!(this.mainService.userRole==role.admin)">
 
             <div class="d-flex align-items-center pb-3 mb-5 border-bottom">
-                <span class="fs-2">My current order</span>
+                <span class="fs-2">My Current Order</span>
             </div>
 
-            <div *ngIf="isLoading == true">
+            <div *ngIf="isLoading">
                 <app-loader></app-loader>
             </div>
 
-            <div class="text-center" *ngIf="isLoaded == true && orderArray.length == 0">
+            <!-- <div class="text-center" *ngIf="isLoaded == true && orderArray.length == 0">
                 <h3>You haven't ordered anything yet.</h3>
-            </div>
+            </div> -->
 
-            <div *ngFor="let order of orderArray">
+            <div *ngIf="!isLoading">
                 <div class="card mx-auto" style="max-width: 700px;">
                     <div class="card-header">
-                        <strong>Order # {{order.orderNo}}</strong> placed on {{order.addedOn}}
+                        <strong>Order ID: {{order.orderId}}</strong> placed on {{order.orderDate | date}}
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">ID: {{order.orderId}}</h5>
-                        <div *ngFor="let oi of order.orderedItems">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-title">Customer ID: {{order.userId}}</h5>
+                        <div *ngFor="let oi of order.foodOrders">
                             <p class="card-text">
-                                {{oi.name}}: ₹{{oi.price}} × {{oi.quantity}} = ₹{{getItemTotalAmount(oi.price, oi.quantity)}}
+                                {{oi.foodName}}: ₹{{oi.price}} × {{oi.quantity}} = ₹{{getItemTotalAmount(oi.price, oi.quantity)}}
                             </p>
                         </div>
-                        <hr> <strong>Total amount paid: ₹{{order.totalAmt}}</strong> (inclusive of 18 %GST)
+                        <hr>
+                        <div class="row p-2 m-2 justify-content-between" *ngIf="this.mainService.userRole==role.user">
+
+                            <strong class="justify-content-start" >Total amount paid: ₹{{order.totalPrice}}</strong>
+                            <strong class="justify-content-end">Order Status: {{order.status}}</strong>
+                        </div> 
+                        <div class="row" #togbtn *ngIf="this.mainService.userRole==role.chef && !isReady">
+                            <button class="col btn btn-outline-danger" (click)="confirmOrder(false)">Reject</button>
+                            <button class="col btn btn-outline-success" (click)="confirmOrder(true)" >Accept</button>
+                        </div>
+                        <div *ngIf="this.mainService.userRole==role.chef && isReady">
+                            <button class="col btn btn-outline-success" (click)="completeOrder()">Order Is Ready</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div class="container" *ngIf="!(this.mainService.userRole==role.chef)">
 
             <div class="d-flex align-items-center pb-3 mb-5 border-bottom">
-                <span class="fs-2">My orders history</span>
+                <span class="fs-2">Orders History</span>
             </div>
 
-            <div *ngIf="isLoading == true">
+            <div *ngIf="isLoadingList">
                 <app-loader></app-loader>
             </div>
 
-            <div class="text-center" *ngIf="isLoaded == true && orderArray.length == 0">
+            <!-- <div class="text-center" *ngIf="isLoaded == true && orderArray.length == 0">
                 <h3>You haven't ordered anything yet.</h3>
-            </div>
+            </div> -->
+<!-- <div *ngFor="let order of orderList" >
 
-            <div *ngFor="let order of orderArray">
+<h3>{{order.orderId}}</h3>
+</div > -->
+<div *ngIf="!isLoadingList">
+            <div *ngFor="let order of orderList | paginate
+            : {
+                itemsPerPage: itemsPerPage,
+                currentPage: page,
+                totalItems: totalItems
+              }">
                 <div class="card mx-auto" style="max-width: 700px;">
                     <div class="card-header">
-                        <strong>Order # {{order.orderNo}}</strong> placed on {{order.addedOn}}
+                        <strong>Order ID: {{order.orderId}}</strong> placed on {{order.orderDate | date}}
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">ID: {{order.orderId}}</h5>
-                        <div *ngFor="let oi of order.orderedItems">
+                        <h5 class="card-title"></h5>
+                        <h5 class="card-title">Customer ID: {{order.userId}}</h5>
+                        <div *ngFor="let oi of order.foodOrders">
                             <p class="card-text">
-                                {{oi.name}}: ₹{{oi.price}} × {{oi.quantity}} = ₹{{getItemTotalAmount(oi.price, oi.quantity)}}
+                                {{oi.foodName}}: ₹{{oi.price}} × {{oi.quantity}} = ₹{{getItemTotalAmount(oi.price, oi.quantity)}}
                             </p>
                         </div>
-                        <hr> <strong>Total amount paid: ₹{{order.totalAmt}}</strong> (inclusive of 18 %GST)
+                        <hr>
+                        <div class="row p-2 m-2 justify-content-between" *ngIf="!(this.mainService.userRole==role.chef)">
+
+                            <strong >Total amount paid: ₹{{order.totalPrice}}</strong>
+                            <strong>Order Status: {{order.status}}</strong>
+                        </div> 
                     </div>
                 </div>
             </div>
+            <pagination-controls class="align-middle justify-content-center align-items-center m-3 " *ngIf="(this.mainService.userRole==role.user)" (pageChange)="userGetAllOrderDetail(page = $event)"></pagination-controls>
+            <pagination-controls class="align-middle justify-content-center align-items-center m-3 " *ngIf="(this.mainService.userRole==role.admin)" (pageChange)="adminGetAllOrderDetail(page = $event)"></pagination-controls>
         </div>
+    </div>
     </div>
 </main>

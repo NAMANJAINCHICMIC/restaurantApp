@@ -11,19 +11,15 @@ import { ViewProfileComponent } from './view-profile/view-profile.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { AddFoodItemComponent } from './add-food-item/add-food-item.component';
 import { AddChefComponent } from './add-chef/add-chef.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import { MainRoutingModule } from './main-routing.module';
 import { AppRoutingModule } from '../app-routing.module';
 import { MainComponent } from './main/main.component';
 import { ViewUsersComponent } from './view-users/view-users.component';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
-import { MainCourseComponent } from './main-course/main-course.component';
-import { DrinksComponent } from './drinks/drinks.component';
-
-import { DessertComponent } from './dessert/dessert.component';
-import { StartersComponent } from './starters/starters.component';
 
 @NgModule({
   declarations: [
@@ -38,23 +34,21 @@ import { StartersComponent } from './starters/starters.component';
     MainComponent,
     ViewUsersComponent,
 
-    MainCourseComponent,
-    DrinksComponent,
-
-    DessertComponent,
-     StartersComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     MatIconModule,
     MatSelectModule,
+    MatSlideToggleModule,
     ReactiveFormsModule,
     MainRoutingModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    FormsModule
   ],
   exports:[
-    MatIconModule
+    MatIconModule,
+    MatSlideToggleModule
   ]
 })
 export class MainModule { }
