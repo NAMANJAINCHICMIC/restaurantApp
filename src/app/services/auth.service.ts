@@ -7,6 +7,7 @@ import { environment } from 'src/environment';
 import {APIS} from 'src/app/utils/constants/link'
 import { ToastrService } from 'ngx-toastr';
 import { MainService } from './main.service';
+import { SocketService } from './socket.service';
 
 const AUTH_API = environment.AUTH_API;
 @Injectable({
@@ -14,7 +15,7 @@ const AUTH_API = environment.AUTH_API;
 })
 export class AuthService {
   // userRole ?:string;
-  constructor(private http: HttpClient ,private toastr: ToastrService , private router: Router , private mainService: MainService) { }
+  constructor(private http: HttpClient ,private toastr: ToastrService , private router: Router , private mainService: MainService , private socketService : SocketService) { }
   storeToken(tokenValue:string){
     localStorage.setItem('token',tokenValue)
   }
@@ -82,6 +83,7 @@ export class AuthService {
     return this.http.post(AUTH_API + APIS.AUTH.LOGOUT, { });
   }
   signOut(){
+   
     this.logout().subscribe(
       (res:any)=>{
         this.toastr.info(res.message);
@@ -91,6 +93,7 @@ export class AuthService {
       }}
     );
     this.mainService.cartObj = null;
+    this.socketService.stopChatConnection();
   }
   // imageUpload(file: any): Observable<any> {
    

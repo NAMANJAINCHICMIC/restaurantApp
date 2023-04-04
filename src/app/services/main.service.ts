@@ -45,6 +45,9 @@ export class MainService {
   updateUserProfile(data:any):Observable<any>{
     return this.http.put(AUTH_API + APIS.MAIN.UPDATE_PROFILE , data)
   }
+  toggleBlock(data:any):Observable<any>{
+    return this.http.delete(AUTH_API + APIS.MAIN.TOGGLE_BLOCK +`?userId=${data}`)
+  }
   addFood(data:any):Observable<any>{
     return this.http.post(AUTH_API + APIS.MAIN.ADD_fOOD , data)
   }
@@ -54,9 +57,14 @@ export class MainService {
    data.value
     );
   }
-  getUsers(page:any){
+  getUsers(page:any,role:any = 'all'){
     return this.http.get(
-      AUTH_API + APIS.MAIN.GET_USERS+`?PageNumber=${page}`
+      AUTH_API + APIS.MAIN.GET_USERS+`?PageNumber=${page}`+`&userType=${role}`
+    );
+  }
+  getUsersBySearch(searchQuery:any,role:any = 'all'){
+    return this.http.get(
+      AUTH_API + APIS.MAIN.GET_USERS+`?searchString=${searchQuery}`+`&userType=${role}`
     );
   }
   getFood(page:any){
@@ -73,22 +81,20 @@ export class MainService {
      this.http.get(
       AUTH_API + APIS.MAIN.GET_ORDERS_BY_ADMINCHEF+`?orderId=${orderId}`
     ).subscribe((res:any)=>{
-      // this.orderDetail = res?.data?.totalAvailableRecords
-      //  this.usersList =res?.data?.list
+     
        console.log("orderdetail",res);
        this.orderDetail.next(res?.data?.list[0])
-      //  console.log(this.usersList);
+    
      });
   }
   userGetOrderDetail(orderId:any){
      this.http.get(
       AUTH_API + APIS.MAIN.GET_ORDERS_BY_USER+`?orderId=${orderId}`
     ).subscribe((res:any)=>{
-      // this.orderDetail = res?.data?.totalAvailableRecords
-      //  this.usersList =res?.data?.list
+   
        console.log("orderdetail",res);
        this.orderDetail.next(res?.data?.list[0])
-      //  console.log(this.usersList);
+  
      });
   }
   userGetAllOrderDetail(page:number){
@@ -214,37 +220,15 @@ export class MainService {
     this.removeCartData();
   }
 
-
-
-  // onCartPageObs() {
-  //   this.onCartPageSub.next(false);
-  //   return this.onCartPageSub.asObservable();
-  // }
-
-  // goToOrders(v: boolean) {
-  //   this.onCartPageSub.next(v);
-  // }
-
-  // onConfirmOrderPageObs() {
-  //   return this.onConfirmOrderPageSub.asObservable();
-  // }
-
-  // hideCartBar(v: boolean) {
-  //   this.onConfirmOrderPageSub.next(v);
-  // }
-
   // cart locol storage
   addCartData(cart: Cart |null) {
     console.log("addCart",cart)
     localStorage.setItem('cartData', JSON.stringify(cart));
-
     const obj = JSON.parse(localStorage.getItem('cartData') || '{}');
-// console.log("obj",obj)
     // check if items in cart is empty
     if (!Object.keys(obj.items).length) {
       this.removeCartData();
     }else{
-
       this.cartDataSub.next(JSON.parse(this.getCartData()||'{}'));
     }
   }
@@ -255,11 +239,9 @@ export class MainService {
     }
     this.cartDataSub.next(this.cartObj);
   }
-
   getCartData() {
     return localStorage.getItem('cartData');
   }
-
   getCartDataObservable() {
     this.cartDataSub.next(JSON.parse(this.getCartData() || '{}')== '{}' ?JSON.parse(this.getCartData() || '{}'):this.cartObj);
     return this.cartDataSub.asObservable();

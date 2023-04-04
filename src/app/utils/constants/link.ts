@@ -14,6 +14,7 @@ export const APIS ={
         GET_ORDERS_BY_ADMINCHEF:'api/v1/order/adminChefGet',
         GET_USERS:'api/v1/admin/get',
         REMOVE_BY_ADMIN:'api/v1/admin/removeUser',
+        TOGGLE_BLOCK:'api/v1/admin/ToggleBlockUser',
         REMOVE:'api/v1/usernchef/delete',
         ADD_CHEF:'api/v1/admin/addChef',
         ADD_fOOD:'api/v1/food/addFood',

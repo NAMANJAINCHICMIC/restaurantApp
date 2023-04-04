@@ -48,18 +48,10 @@ this.mainService.orderDetail.subscribe((res:any)=>{
   //  this.usersList =res?.data?.list
    console.log("orderPage",res);
    if(res){
-
      this.order=res
      this.isLoading =false;
     }
-  //  console.log(this.usersList);
-
-  
  });
-//  this.mainService.userGetAllOrderDetail();
-
-
-
   }
   getItemTotalAmount(price: number, quantity: number) {
     return Number(price) * Number(quantity);
@@ -86,6 +78,9 @@ this.isReady= this.socketService.isReady;
     this.mainService.userGetAllOrderDetail(page).subscribe((res:any)=>{
       this.totalItems = res?.data?.totalAvailableRecords
        this.orderList =res?.data?.list
+      //  if(this.orderList[0].orderId == this.order.orderId){
+      //   this.orderList.shift()
+      //  }
        console.log(res);
        this.isLoadingList= false;
        console.log("orderList",this.orderList);

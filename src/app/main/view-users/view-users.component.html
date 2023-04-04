@@ -1,11 +1,31 @@
 <div class="m-5 p-5 justify-content-center">
+  <div>
+    <h4>User Role</h4>
+<mat-form-field appearance="fill">
+ 
+  <select matNativeControl (change)="onchangeRole($event)" >
+    <option value="all" selected>All</option>
+    <option value="chef">chef</option>
+    <option value="user">user</option>
+  </select>
+</mat-form-field>
+  </div>
+  <div class="input-group rounded mb-3">
+    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" id="search" #search
+      aria-describedby="search-addon" (input)="onSearchQueryInput($event)" />
+    <span class="input-group-text border-0" id="search-addon">
+  
+      <mat-icon>search</mat-icon>
+    </span>
+  </div>
 <table class="table align-middle mb-0 bg-white ">
     <thead class="bg-light">
       <tr>
         <th>Name</th>
-        <!-- <th>Title</th> -->
+     
         <th>Email</th>
         <th>Position</th>
+        <th>Activity</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -15,7 +35,7 @@
           itemsPerPage: itemsPerPage,
           currentPage: page,
           totalItems: totalItems
-        }">
+        }" >
         <td>
           <div class="d-flex align-items-center">
             <img
@@ -35,12 +55,15 @@
           <p class="fw-normal mb-1">{{user?.userRole}}</p>
           
         </td>
-        <!-- <td>
-          <span class="badge badge-success rounded-pill d-inline">Active</span>
-        </td> -->
+        <td >
+          <span *ngIf="user?.isActive" class="badge badge-success rounded-pill d-inline">Active</span>
+        </td>
         <td>
-          <button type="button" class="btn btn-link btn-sm btn-rounded">
-            Edit
+          <button type="button" class="btn btn-link btn-sm btn-rounded"  (click)="onToggleBtn(user?.userId)" (click)="user.isBlocked = !user.isBlocked" *ngIf="user.isBlocked">
+            Unblock
+          </button>
+          <button type="button" class="btn btn-link btn-sm btn-rounded" (click)="onToggleBtn(user?.userId)" (click)="user.isBlocked = !user.isBlocked"  *ngIf="!user.isBlocked">      
+            Block
           </button>
         </td>
       </tr>

@@ -21,7 +21,7 @@
         
   
               <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button> -->
-              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit() " autocomplete="on">
                 <div class="form-group form-outline mb-4">
                   <label for="exampleInputEmail1">Email address</label>
                   <input type="email" required
@@ -38,7 +38,7 @@
                   <!-- <input type="password" class="form-control col-md-4" id="exampleInputPassword1" formControlName="password"  [ngClass]="{'is-invalid': controlName.password.errors && (controlName.password.touched || controlName.password.dirty), 'is-valid':controlName.password.valid}" placeholder="Password"> -->
                   <div class="d-flex">
                     <input [type]="visible?'password':'text'" class="form-control col  col-12 form-control-lg"
-                      id="inputPassword4" formControlName="password"
+                      id="inputPassword4" formControlName="password" autocomplete="off"
                       [ngClass]="{'is-invalid': controlName.password.errors && (controlName.password.touched || controlName.password.dirty), 'is-valid':controlName.password.valid}"
                       placeholder="Password">
                     <span class="eyeicon col align-self-center justify-content-center col-1"><i

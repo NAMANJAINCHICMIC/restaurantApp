@@ -17,13 +17,13 @@
 
             <div *ngIf="!isLoading">
                 <div class="card mx-auto" style="max-width: 700px;">
-                    <div class="card-header">
-                        <strong>Order ID: {{order.orderId}}</strong> placed on {{order.orderDate | date}}
+                    <div class="card-header" [ngStyle]="(order.status=='completed')?{'background-color': 'rgba(38, 161, 48, 0.46)'}:{'background-color': 'rgb(255 47 0 / 46%)'}">
+                        <strong>Order ID: {{order?.orderId}}</strong> placed on {{order?.orderDate | date}}
                     </div>
                     <div class="card-body">
                         <h5 class="card-title"></h5>
-                        <h5 class="card-title">Customer ID: {{order.userId}}</h5>
-                        <div *ngFor="let oi of order.foodOrders">
+                        <h5 class="card-title">Customer ID: {{order?.userId}}</h5>
+                        <div *ngFor="let oi of order?.foodOrders">
                             <p class="card-text">
                                 {{oi.foodName}}: ₹{{oi.price}} × {{oi.quantity}} = ₹{{getItemTotalAmount(oi.price, oi.quantity)}}
                             </p>
@@ -69,8 +69,8 @@
                 currentPage: page,
                 totalItems: totalItems
               }">
-                <div class="card mx-auto" style="max-width: 700px;">
-                    <div class="card-header">
+                <div class="card mx-auto" style="max-width: 700px;" *ngIf="!(this.order.orderid == order.orderId)" >
+                    <div class="card-header" [ngStyle]="(order.status=='completed')?{'background-color': 'rgba(38, 161, 48, 0.46)'}:{'background-color': 'rgb(255 47 0 / 46%)'}">
                         <strong>Order ID: {{order.orderId}}</strong> placed on {{order.orderDate | date}}
                     </div>
                     <div class="card-body">

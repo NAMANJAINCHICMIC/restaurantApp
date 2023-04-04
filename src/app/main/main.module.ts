@@ -19,7 +19,8 @@ import { MainComponent } from './main/main.component';
 import { ViewUsersComponent } from './view-users/view-users.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatIconModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatFormFieldModule,
+    MatInputModule,
     ReactiveFormsModule,
     MainRoutingModule,
     NgxPaginationModule,
@@ -48,7 +51,9 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
   ],
   exports:[
     MatIconModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class MainModule { }

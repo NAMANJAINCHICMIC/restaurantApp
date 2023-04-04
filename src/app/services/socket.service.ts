@@ -5,14 +5,15 @@ import { environment } from 'src/environment';
 import { ToastrService } from 'ngx-toastr';
 import { MainService } from './main.service';
 import { role } from '../utils/constants/role';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
   public hubConnection: signalR.HubConnection | any;
-  onlineUsers: Array<any> = [];
+  onlineUsers = new BehaviorSubject<Array<any>>([]);
   isReady = false;
   foodUpdated = new Subject<any>;
   constructor(private toastr: ToastrService , private mainService : MainService) { }
@@ -22,22 +23,16 @@ export class SocketService {
   }
   public async initiateSignalrConnection(token: any): Promise<void> {
     try {
-
       this.hubConnection = new HubConnectionBuilder()
         .withUrl(environment.AUTH_API + "foodHub",
           { skipNegotiation: true, transport: signalR.HttpTransportType.WebSockets, accessTokenFactory: () => token })
         .withAutomaticReconnect().build();
       await this.hubConnection.start();
       console.log("connection started");
-
-      // this.sendMessageListener();
       this.foodHubListener()
     }
     catch (err: any) {
-      console.log("Error while starting connection", err);
-      // setTimeout(() => {
-      //   this.startConnection(token);
-      // }, 2000)
+      console.log("Error while starting connection", err);    
     }
   }
 foodHubListener(){
@@ -46,15 +41,24 @@ foodHubListener(){
   this.hubConnection?.send("OnlineUsers").catch((error: any) => {
     console.log('error of OnlineUsers');
   });
+  console.log("onlineUsers");
   });
   this.hubConnection.on('UpdateOnlineUsers', (onlineUsers: any) => {
     //this function gets online users list in response
-    this.onlineUsers = [...onlineUsers];
-    console.log("onlineUsers", onlineUsers);
+ 
+    this.onlineUsers.next(onlineUsers.list);
+    console.log("onlineUsers update",onlineUsers.list);
   });
   this.hubConnection.on('Message', (message:string) => {
   // this function is used to show incoming messages to user
   this.toastr.info(message);
+  // Swal.fire({
+  //   position: 'bottom-end',
+  //   icon: 'success',
+  //   title: message,
+  //   showConfirmButton: true,
+  //   timer: 15000
+  // })
   console.log(message);
   });
   this.hubConnection.on('UserOrderStatus', (order:any) => {
@@ -72,8 +76,7 @@ foodHubListener(){
     if(this.mainService.userRole == role.chef){
       this.toastr.info("New Order Recieved");
 this.mainService.chefGetOrderDetail(orderOutput?.orderId);
-    }
-    
+    }    
   console.log(orderOutput);
   });
   this.hubConnection.on('UpdateFoods', (food:any) => {
